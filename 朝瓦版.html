@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あさかわら版 — 高校生ニュースポータル</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Kaisei+Decol:wght@700&display=swap');
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    background:
+      repeating-radial-gradient(circle at 20% 30%, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 6px),
+      #8a6244;
+    color:#2a1c12;
+    line-height:1.7;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:30px 16px 90px;}
+
+  /* Masthead pinned note */
+  .masthead{text-align:center; margin-bottom:8px;}
+  .masthead .sub{font-size:11px; letter-spacing:.25em; color:#f0e0c8; margin-bottom:10px;}
+  .masthead h1{
+    font-family:'Kaisei Decol',serif; font-size:clamp(26px,7vw,42px);
+    display:inline-block; background:#fff8ec; color:#2a1c12;
+    padding:10px 26px; margin:0; transform:rotate(-1.5deg);
+    box-shadow:2px 3px 8px rgba(0,0,0,0.35);
+    position:relative;
+  }
+  .masthead h1::before{
+    content:'📌'; position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:20px;
+  }
+  .date-line{
+    text-align:center; color:#f6ead4; font-size:12.5px; margin:16px 0 26px;
+  }
+
+  /* Category tabs (main 6) */
+  .cat-tabs{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:22px;
+  }
+  .cat-tabs button{
+    background:#6f4c33; color:#f6ead4; border:1px solid #543a26;
+    padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer;
+    border-radius:3px; font-family:inherit;
+  }
+  .cat-tabs button.active{background:#fdf6e3; color:#2a1c12; border-color:#fdf6e3;}
+
+  /* Sub tag filter (only shown for 進路 category) */
+  .tag-filter{
+    display:none; flex-wrap:wrap; gap:6px; justify-content:center;
+    margin-bottom:22px;
+  }
+  .tag-filter.show{display:flex;}
+  .tag-filter button{
+    background:transparent; color:#f6ead4; border:1px solid #f6ead4;
+    padding:4px 11px; font-size:11.5px; cursor:pointer; border-radius:20px; font-family:inherit;
+  }
+  .tag-filter button.active{background:#c9432f; border-color:#c9432f; color:#fff;}
+
+  /* Cork board grid */
+  .board{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  @media(min-width:640px){ .board{grid-template-columns:1fr 1fr;} }
+
+  .note{
+    background:#fdf6e3; padding:15px 17px;
+    box-shadow:2px 3px 10px rgba(0,0,0,0.3);
+    transform:rotate(var(--r,-0.6deg));
+    position:relative;
+  }
+  .note:nth-child(3n){--r:0.7deg;}
+  .note:nth-child(3n+1){--r:-1deg;}
+  .note:nth-child(3n+2){--r:0.3deg;}
+  .note::before{
+    content:'📍'; position:absolute; top:-10px; left:14px; font-size:16px;
+  }
+  .note .tag{
+    display:inline-block; font-size:10px; font-weight:700; background:#c9432f; color:#fff;
+    padding:2px 8px; margin-bottom:8px;
+  }
+  .note h3{font-size:15px; margin:0 0 6px; font-weight:700; line-height:1.45;}
+  .note h3 a{color:#2a1c12; text-decoration:none;}
+  .note h3 a:hover{text-decoration:underline;}
+  .note p{margin:0 0 6px; font-size:12px; color:#5c4a38;}
+  .note .meta{font-size:10.5px; color:#8a7660;}
+
+  .empty{
+    text-align:center; color:#f6ead4; font-size:13px; padding:40px 0; grid-column:1/-1;
+  }
+
+  footer{text-align:center; font-size:11px; color:#f0e0c8; margin-top:40px; letter-spacing:.08em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="sub">DAILY SCHOOL EDITION</div>
+    <h1>あさかわら版</h1>
+  </div>
+  <div class="date-line" id="dateLine"></div>
+
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="tag-filter" id="tagFilter"></div>
+  <div class="board" id="board"></div>
+
+  <footer>あさかわら版・高校生ニュースポータル ／ NHKソースは除外</footer>
+</div>
+
+<script>
+/* =====================================================================
+   記事データ(ここを毎朝更新する)
+   ---------------------------------------------------------------------
+   ・毎朝、Claudeとのチャットでその日のニュースを検索してもらい、
+     この ARTICLES 配列と同じ形式のJSONを生成してもらう。
+   ・生成されたブロックをこの配列にそのまま貼り替えるだけでOK。
+   ・category は以下の6つのいずれか:
+       "進路" | "経済" | "国際" | "社会" | "スポーツ" | "科学"
+   ・"進路" カテゴリの記事だけ、career_tag (看護/保育/スポーツ科学/法学/
+     芸術/経済経営/理工 など)を付けると、生徒がタグで絞り込める。
+   ===================================================================== */
+  const ARTICLES = [
+    {category:"進路", career_tag:"看護", tag:"看護・医療", title:"日本看護協会、看護職の処遇改善と教育体制強化を厚労省へ要望", summary:"在宅・施設領域の看護職員の処遇改善などを求める要望を提出。", url:"https://www.nurse.or.jp/home/about/newsrelease/", date:"5/28"},
+    {category:"進路", career_tag:"保育", tag:"保育・教育", title:"保育士の配置基準改善、1歳児加算の運用が本格化", summary:"1歳児は5人に1人体制への加算が広がりつつあるが、実施率は自治体差も。", url:"https://ichitasu.co.jp/hoikushi-haichi", date:"7/1"},
+    {category:"進路", career_tag:"スポーツ科学", tag:"スポーツ科学", title:"熊本地震の被災地で熱中症予防アプリを産業医科大学が開発", summary:"避難所生活者向けに、暑さ対策を支援するアプリを提供。", url:"https://www.cbnews.jp/medical", date:"8/6"},
+    {category:"経済", tag:"経済", title:"円安進行、1ドル159円台に 中東情勢の緊迫化が影響", summary:"原油先物の上昇や貿易赤字拡大への警戒感から円売りが優勢に。", url:"https://www.nikkei.com/markets/currencies/", date:"8/21"},
+    {category:"国際", tag:"国際", title:"トランプ氏、ホルムズ海峡の通航料徴収を示唆 対イラン最終合意なければ", summary:"最終合意が成立しない場合、米国が通航料を課す可能性に言及。", url:"https://www.cnn.co.jp/usa/35249196.html", date:"8/20"},
+    {category:"社会", tag:"社会", title:"熱中症による救急搬送、8月10〜16日で全国3,132人", summary:"総務省消防庁が週間の速報値を公表、猛暑が継続。", url:"https://www.fdma.go.jp/disaster/heatstroke/post3.html", date:"8/16"},
+    {category:"スポーツ", tag:"高校野球", title:"智辯和歌山が5年ぶり決勝進出 甲子園準決勝で横浜に7-1", summary:"22日の決勝は健大高崎と対戦。", url:"https://koshien.hanshin.co.jp/highschool/summer2026/", date:"8/20"},
+    {category:"科学", tag:"AI・生命科学", title:"AIがウイルスの全ゲノムを設計、実験室で感染能力を確認", summary:"ゲノム言語モデルを用いた研究成果が科学誌『Science』に掲載。", url:"https://note.com/kijicast/n/n7bdd2d19c994", date:"8/6"}
+  ];
+
+  const CATEGORIES = ["進路","経済","国際","社会","スポーツ","科学"];
+  let state = {category:"進路", careerTag:null};
+
+  // date
+  const today = new Date();
+  const days=['日','月','火','水','木','金','土'];
+  document.getElementById('dateLine').textContent =
+    `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日(${days[today.getDay()]}) 更新`;
+
+  // category tabs
+  const catTabs = document.getElementById('catTabs');
+  catTabs.innerHTML = CATEGORIES.map(c =>
+    `<button data-cat="${c}" class="${c===state.category?'active':''}">${c}</button>`
+  ).join('');
+  catTabs.addEventListener('click', e=>{
+    if(e.target.tagName!=='BUTTON') return;
+    state.category = e.target.dataset.cat;
+    state.careerTag = null;
+    catTabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.cat===state.category));
+    render();
+  });
+
+  function render(){
+    // tag filter (only for 進路)
+    const tagFilter = document.getElementById('tagFilter');
+    if(state.category === "進路"){
+      const tags = [...new Set(ARTICLES.filter(a=>a.category==="進路").map(a=>a.career_tag))];
+      tagFilter.classList.add('show');
+      tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
+        tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
+    }else{
+      tagFilter.classList.remove('show');
+      tagFilter.innerHTML = '';
+    }
+
+    // board
+    const board = document.getElementById('board');
+    let items = ARTICLES.filter(a => a.category === state.category);
+    if(state.category === "進路" && state.careerTag){
+      items = items.filter(a => a.career_tag === state.careerTag);
+    }
+    if(items.length === 0){
+      board.innerHTML = `<div class="empty">この分野の記事はまだありません。</div>`;
+      return;
+    }
+    board.innerHTML = items.map(a => `
+      <div class="note">
+        <span class="tag">${a.tag}</span>
+        <h3><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h3>
+        <p>${a.summary}</p>
+        <div class="meta">${a.date}更新</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('tagFilter').addEventListener('click', e=>{
+    if(e.target.tagName!=='BUTTON') return;
+    state.careerTag = e.target.dataset.tag === '__all' ? null : e.target.dataset.tag;
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
