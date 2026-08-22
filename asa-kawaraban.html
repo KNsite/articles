@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あさかわら版 — 高校生ニュースポータル</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Kaisei+Decol:wght@700&display=swap');
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    background:
+      repeating-radial-gradient(circle at 20% 30%, rgba(0,0,0,0.05) 0, rgba(0,0,0,0.05) 1px, transparent 1px, transparent 6px),
+      #8a6244;
+    color:#2a1c12;
+    line-height:1.7;
+  }
+  .wrap{max-width:900px; margin:0 auto; padding:30px 16px 90px;}
+
+  /* Masthead pinned note */
+  .masthead{text-align:center; margin-bottom:8px;}
+  .masthead .sub{font-size:11px; letter-spacing:.25em; color:#f0e0c8; margin-bottom:10px;}
+  .masthead h1{
+    font-family:'Kaisei Decol',serif; font-size:clamp(26px,7vw,42px);
+    display:inline-block; background:#fff8ec; color:#2a1c12;
+    padding:10px 26px; margin:0; transform:rotate(-1.5deg);
+    box-shadow:2px 3px 8px rgba(0,0,0,0.35);
+    position:relative;
+  }
+  .masthead h1::before{
+    content:'📌'; position:absolute; top:-14px; left:50%; transform:translateX(-50%); font-size:20px;
+  }
+  .date-line{
+    text-align:center; color:#f6ead4; font-size:12.5px; margin:16px 0 26px;
+  }
+
+  /* Week selector */
+  .week-select-wrap{ text-align:center; margin-bottom:16px; }
+  .week-select-wrap select{
+    background:#fdf6e3; color:#2a1c12; border:1px solid #543a26;
+    padding:7px 14px; font-size:13px; font-weight:700; font-family:inherit;
+    border-radius:3px; box-shadow:1px 2px 5px rgba(0,0,0,0.25);
+  }
+
+  /* Category tabs (main 6) */
+  .cat-tabs{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:22px;
+  }
+  .cat-tabs button{
+    background:#6f4c33; color:#f6ead4; border:1px solid #543a26;
+    padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer;
+    border-radius:3px; font-family:inherit;
+  }
+  .cat-tabs button.active{background:#fdf6e3; color:#2a1c12; border-color:#fdf6e3;}
+
+  /* Sub tag filter (only shown for 進路 category) */
+  .tag-filter{
+    display:none; flex-wrap:wrap; gap:6px; justify-content:center;
+    margin-bottom:22px;
+  }
+  .tag-filter.show{display:flex;}
+  .tag-filter button{
+    background:transparent; color:#f6ead4; border:1px solid #f6ead4;
+    padding:4px 11px; font-size:11.5px; cursor:pointer; border-radius:20px; font-family:inherit;
+  }
+  .tag-filter button.active{background:#c9432f; border-color:#c9432f; color:#fff;}
+
+  /* Cork board grid */
+  .board{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:16px;
+  }
+  @media(min-width:640px){ .board{grid-template-columns:1fr 1fr;} }
+
+  .note{
+    background:#fdf6e3; padding:15px 17px;
+    box-shadow:2px 3px 10px rgba(0,0,0,0.3);
+    transform:rotate(var(--r,-0.6deg));
+    position:relative;
+  }
+  .note:nth-child(3n){--r:0.7deg;}
+  .note:nth-child(3n+1){--r:-1deg;}
+  .note:nth-child(3n+2){--r:0.3deg;}
+  .note::before{
+    content:'📍'; position:absolute; top:-10px; left:14px; font-size:16px;
+  }
+  .note .tag{
+    display:inline-block; font-size:10px; font-weight:700; background:#c9432f; color:#fff;
+    padding:2px 8px; margin-bottom:8px;
+  }
+  .note h3{font-size:15px; margin:0 0 6px; font-weight:700; line-height:1.45;}
+  .note h3 a{color:#2a1c12; text-decoration:none;}
+  .note h3 a:hover{text-decoration:underline;}
+  .note p{margin:0 0 6px; font-size:12px; color:#5c4a38;}
+  .note .meta{font-size:10.5px; color:#8a7660;}
+
+  .empty{
+    text-align:center; color:#f6ead4; font-size:13px; padding:40px 0; grid-column:1/-1;
+  }
+
+  footer{text-align:center; font-size:11px; color:#f0e0c8; margin-top:40px; letter-spacing:.08em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="sub">DAILY SCHOOL EDITION</div>
+    <h1>あさかわら版</h1>
+  </div>
+  <div class="date-line" id="dateLine"></div>
+
+  <div class="week-select-wrap">
+    <select id="weekSelect"></select>
+  </div>
+
+  <div class="cat-tabs" id="catTabs"></div>
+  <div class="tag-filter" id="tagFilter"></div>
+  <div class="board" id="board"></div>
+
+  <footer>あさかわら版・高校生ニュースポータル ／ NHKソースは除外</footer>
+</div>
+
+<script>
+/* =====================================================================
+   記事データ(ここを毎朝更新する) — 週ごとのアーカイブ構造
+   ---------------------------------------------------------------------
+   ・WEEKS は週ごとの配列。一番最後(最新)の週の articles に、
+     毎朝その日の記事を「追記」していく(置き換えない)。
+   ・土曜日になったら、WEEKS の末尾に新しい週オブジェクトを追加する。
+     label は「8/22〜8/28」のように土曜〜金曜の日付範囲を書く。
+   ・毎朝、Claudeとのチャットでその日のニュースを検索してもらい、
+     articles と同じ形式のJSONブロックを生成してもらう。
+     生成されたブロックを最新週の articles 配列の末尾に貼り足すだけでOK。
+   ・category は以下の4つのいずれか:
+       "医療・健康系" | "教育・保育系" | "社会・ビジネス系" | "実技・専門系"
+   ・career_tag は分野ごとの専門タグ(該当すれば付ける、一般ニュースは省略可):
+       医療・健康系: 看護/作業療法/理学療法/臨床検査/栄養
+       教育・保育系: 教育/保育
+       社会・ビジネス系: 法学/経済/経営/国際関係/福祉
+       実技・専門系: スポーツ科学/美容/調理
+   ===================================================================== */
+  const WEEKS = [
+    {
+      label: "8/22〜8/28",
+      articles: [
+        {category:"医療・健康系", career_tag:"看護", tag:"看護・医療", title:"日本看護協会、看護職の処遇改善と教育体制強化を厚労省へ要望", summary:"在宅・施設領域の看護職員の処遇改善などを求める要望を提出。", url:"https://www.nurse.or.jp/home/about/newsrelease/", date:"5/28"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育・教育", title:"保育士の配置基準改善、1歳児加算の運用が本格化", summary:"1歳児は5人に1人体制への加算が広がりつつあるが、実施率は自治体差も。", url:"https://ichitasu.co.jp/hoikushi-haichi", date:"7/1"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"スポーツ科学", title:"熊本地震の被災地で熱中症予防アプリを産業医科大学が開発", summary:"避難所生活者向けに、暑さ対策を支援するアプリを提供。", url:"https://www.cbnews.jp/medical", date:"8/6"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"円相場、1ドル159円台で推移 中東情勢や米国債買い戻しが影響", summary:"介入警戒感を残しつつ160円の節目が意識される展開に。", url:"https://www.nikkei.com/markets/currencies/", date:"8/21"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際", title:"ホルムズ海峡めぐりイランは強硬姿勢崩さず、米軍は封鎖維持の構え", summary:"貨物船攻撃も相次ぎ、中東情勢の緊迫が続いている。", url:"https://www.jiji.com/jc/archives?g=int_archive_0", date:"8/12"},
+        {category:"社会・ビジネス系", tag:"社会・天気", title:"西日本で38℃超の猛暑、22日は九州で40℃に迫る予想", summary:"来週前半にかけても厳しい暑さが続き、熱中症への厳重警戒が呼びかけられている。", url:"https://tenki.jp/forecaster/deskpart/2026/08/21/40242.html", date:"8/21"},
+        {category:"実技・専門系", tag:"高校野球", title:"夏の甲子園、本日22日決勝 智辯和歌山×健大高崎", summary:"智辯和歌山は5年ぶり、健大高崎は夏初の決勝進出。10時開始予定。", url:"https://koshien.hanshin.co.jp/highschool/summer2026/", date:"8/22"},
+        {category:"実技・専門系", tag:"AI", title:"AIの「再帰的自己改善」、まだ遠い道のりと新研究が指摘", summary:"人間の監督なしに自らを改良していくAIについて、答えのない研究課題への対応力はまだ不足しているとの分析。", url:"https://www.technologyreview.com/2026/08/19/1140195/the-download-ai-recursive-self-improvement-problem-heatwave-causes/", date:"8/19"},
+        {category:"医療・健康系", career_tag:"理学療法", tag:"理学療法", title:"診療報酬改定、疑義解釈(その11)を公表 看護・多職種協働加算など", summary:"リハビリ関連の算定要件について新たな解釈を国が示した。", url:"https://www.pt-ot-st.net/index.php/topics/", date:"8月"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"こども家庭庁、子育て支援に関する会議結果や政策文書を公表", summary:"子育て支援策の検討状況について複数の資料が公開された。", url:"https://www.cfa.go.jp/news", date:"8/21"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"経産省、2027年度予算でAI・半導体に重点配分へ 7.7兆円要求", summary:"成長分野への投資強化を掲げ、過去最大規模の要求となった。", url:"https://www.jiji.com/jc/list?g=eco", date:"8/20"},
+        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"エステ・脱毛サロンの倒産、1〜4月で過去最多の35件に", summary:"大手脱毛サロンの相次ぐ破綻で契約者が被害を受けるケースも。", url:"https://beautynewsjapan.com/", date:"5月"}
+      ]
+    }
+  ];
+
+  const CATEGORIES = ["医療・健康系","教育・保育系","社会・ビジネス系","実技・専門系"];
+  const CAREER_TAGS = {
+    "医療・健康系": ["看護","作業療法","理学療法","臨床検査","栄養"],
+    "教育・保育系": ["教育","保育"],
+    "社会・ビジネス系": ["法学","経済","経営","国際関係","福祉"],
+    "実技・専門系": ["スポーツ科学","美容","調理"]
+  };
+  let state = {weekIndex: WEEKS.length - 1, category:CATEGORIES[0], careerTag:null};
+
+  // week selector
+  const weekSelect = document.getElementById('weekSelect');
+  weekSelect.innerHTML = WEEKS.map((w,i) =>
+    `<option value="${i}" ${i===state.weekIndex?'selected':''}>${w.label}${i===WEEKS.length-1?'(今週)':''}</option>`
+  ).reverse().join('');
+  weekSelect.addEventListener('change', e=>{
+    state.weekIndex = Number(e.target.value);
+    state.careerTag = null;
+    render();
+  });
+
+  // date
+  const today = new Date();
+  const days=['日','月','火','水','木','金','土'];
+  document.getElementById('dateLine').textContent =
+    `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日(${days[today.getDay()]}) 更新`;
+
+  // category tabs
+  const catTabs = document.getElementById('catTabs');
+  catTabs.innerHTML = CATEGORIES.map(c =>
+    `<button data-cat="${c}" class="${c===state.category?'active':''}">${c}</button>`
+  ).join('');
+  catTabs.addEventListener('click', e=>{
+    if(e.target.tagName!=='BUTTON') return;
+    state.category = e.target.dataset.cat;
+    state.careerTag = null;
+    catTabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.cat===state.category));
+    render();
+  });
+
+  function render(){
+    const weekArticles = WEEKS[state.weekIndex].articles;
+
+    // tag filter (career sub-fields, per category)
+    const tagFilter = document.getElementById('tagFilter');
+    const tags = CAREER_TAGS[state.category] || [];
+    tagFilter.classList.add('show');
+    tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
+      tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
+
+    // board
+    const board = document.getElementById('board');
+    let items = weekArticles.filter(a => a.category === state.category);
+    if(state.careerTag){
+      items = items.filter(a => a.career_tag === state.careerTag);
+    }
+    if(items.length === 0){
+      board.innerHTML = `<div class="empty">この分野の記事はまだありません。</div>`;
+      return;
+    }
+    board.innerHTML = items.map(a => `
+      <div class="note">
+        <span class="tag">${a.tag}</span>
+        <h3><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h3>
+        <p>${a.summary}</p>
+        <div class="meta">${a.date}更新</div>
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('tagFilter').addEventListener('click', e=>{
+    if(e.target.tagName!=='BUTTON') return;
+    state.careerTag = e.target.dataset.tag === '__all' ? null : e.target.dataset.tag;
+    render();
+  });
+
+  render();
+</script>
+</body>
+</html>
