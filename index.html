@@ -36,6 +36,14 @@
     text-align:center; color:#f6ead4; font-size:12.5px; margin:16px 0 26px;
   }
 
+  /* Week selector */
+  .week-select-wrap{ text-align:center; margin-bottom:16px; }
+  .week-select-wrap select{
+    background:#fdf6e3; color:#2a1c12; border:1px solid #543a26;
+    padding:7px 14px; font-size:13px; font-weight:700; font-family:inherit;
+    border-radius:3px; box-shadow:1px 2px 5px rgba(0,0,0,0.25);
+  }
+
   /* Category tabs (main 6) */
   .cat-tabs{
     display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:22px;
@@ -105,6 +113,10 @@
   </div>
   <div class="date-line" id="dateLine"></div>
 
+  <div class="week-select-wrap">
+    <select id="weekSelect"></select>
+  </div>
+
   <div class="cat-tabs" id="catTabs"></div>
   <div class="tag-filter" id="tagFilter"></div>
   <div class="board" id="board"></div>
@@ -114,29 +126,62 @@
 
 <script>
 /* =====================================================================
-   記事データ(ここを毎朝更新する)
+   記事データ(ここを毎朝更新する) — 週ごとのアーカイブ構造
    ---------------------------------------------------------------------
+   ・WEEKS は週ごとの配列。一番最後(最新)の週の articles に、
+     毎朝その日の記事を「追記」していく(置き換えない)。
+   ・土曜日になったら、WEEKS の末尾に新しい週オブジェクトを追加する。
+     label は「8/22〜8/28」のように土曜〜金曜の日付範囲を書く。
    ・毎朝、Claudeとのチャットでその日のニュースを検索してもらい、
-     この ARTICLES 配列と同じ形式のJSONを生成してもらう。
-   ・生成されたブロックをこの配列にそのまま貼り替えるだけでOK。
-   ・category は以下の6つのいずれか:
-       "進路" | "経済" | "国際" | "社会" | "スポーツ" | "科学"
-   ・"進路" カテゴリの記事だけ、career_tag (看護/保育/スポーツ科学/法学/
-     芸術/経済経営/理工 など)を付けると、生徒がタグで絞り込める。
+     articles と同じ形式のJSONブロックを生成してもらう。
+     生成されたブロックを最新週の articles 配列の末尾に貼り足すだけでOK。
+   ・category は以下の4つのいずれか:
+       "医療・健康系" | "教育・保育系" | "社会・ビジネス系" | "実技・専門系"
+   ・career_tag は分野ごとの専門タグ(該当すれば付ける、一般ニュースは省略可):
+       医療・健康系: 看護/作業療法/理学療法/臨床検査/栄養
+       教育・保育系: 教育/保育
+       社会・ビジネス系: 法学/経済/経営/国際関係/福祉
+       実技・専門系: スポーツ科学/美容/調理
    ===================================================================== */
-  const ARTICLES = [
-    {category:"進路", career_tag:"看護", tag:"看護・医療", title:"日本看護協会、看護職の処遇改善と教育体制強化を厚労省へ要望", summary:"在宅・施設領域の看護職員の処遇改善などを求める要望を提出。", url:"https://www.nurse.or.jp/home/about/newsrelease/", date:"5/28"},
-    {category:"進路", career_tag:"保育", tag:"保育・教育", title:"保育士の配置基準改善、1歳児加算の運用が本格化", summary:"1歳児は5人に1人体制への加算が広がりつつあるが、実施率は自治体差も。", url:"https://ichitasu.co.jp/hoikushi-haichi", date:"7/1"},
-    {category:"進路", career_tag:"スポーツ科学", tag:"スポーツ科学", title:"熊本地震の被災地で熱中症予防アプリを産業医科大学が開発", summary:"避難所生活者向けに、暑さ対策を支援するアプリを提供。", url:"https://www.cbnews.jp/medical", date:"8/6"},
-    {category:"経済", tag:"経済", title:"円安進行、1ドル159円台に 中東情勢の緊迫化が影響", summary:"原油先物の上昇や貿易赤字拡大への警戒感から円売りが優勢に。", url:"https://www.nikkei.com/markets/currencies/", date:"8/21"},
-    {category:"国際", tag:"国際", title:"トランプ氏、ホルムズ海峡の通航料徴収を示唆 対イラン最終合意なければ", summary:"最終合意が成立しない場合、米国が通航料を課す可能性に言及。", url:"https://www.cnn.co.jp/usa/35249196.html", date:"8/20"},
-    {category:"社会", tag:"社会", title:"熱中症による救急搬送、8月10〜16日で全国3,132人", summary:"総務省消防庁が週間の速報値を公表、猛暑が継続。", url:"https://www.fdma.go.jp/disaster/heatstroke/post3.html", date:"8/16"},
-    {category:"スポーツ", tag:"高校野球", title:"智辯和歌山が5年ぶり決勝進出 甲子園準決勝で横浜に7-1", summary:"22日の決勝は健大高崎と対戦。", url:"https://koshien.hanshin.co.jp/highschool/summer2026/", date:"8/20"},
-    {category:"科学", tag:"AI・生命科学", title:"AIがウイルスの全ゲノムを設計、実験室で感染能力を確認", summary:"ゲノム言語モデルを用いた研究成果が科学誌『Science』に掲載。", url:"https://note.com/kijicast/n/n7bdd2d19c994", date:"8/6"}
+  const WEEKS = [
+    {
+      label: "8/22〜8/28",
+      articles: [
+        {category:"医療・健康系", career_tag:"看護", tag:"看護・医療", title:"日本看護協会、看護職の処遇改善と教育体制強化を厚労省へ要望", summary:"在宅・施設領域の看護職員の処遇改善などを求める要望を提出。", url:"https://www.nurse.or.jp/home/about/newsrelease/", date:"5/28"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育・教育", title:"保育士の配置基準改善、1歳児加算の運用が本格化", summary:"1歳児は5人に1人体制への加算が広がりつつあるが、実施率は自治体差も。", url:"https://ichitasu.co.jp/hoikushi-haichi", date:"7/1"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"スポーツ科学", title:"熊本地震の被災地で熱中症予防アプリを産業医科大学が開発", summary:"避難所生活者向けに、暑さ対策を支援するアプリを提供。", url:"https://www.cbnews.jp/medical", date:"8/6"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"円相場、1ドル159円台で推移 中東情勢や米国債買い戻しが影響", summary:"介入警戒感を残しつつ160円の節目が意識される展開に。", url:"https://www.nikkei.com/markets/currencies/", date:"8/21"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際", title:"ホルムズ海峡めぐりイランは強硬姿勢崩さず、米軍は封鎖維持の構え", summary:"貨物船攻撃も相次ぎ、中東情勢の緊迫が続いている。", url:"https://www.jiji.com/jc/archives?g=int_archive_0", date:"8/12"},
+        {category:"社会・ビジネス系", tag:"社会・天気", title:"西日本で38℃超の猛暑、22日は九州で40℃に迫る予想", summary:"来週前半にかけても厳しい暑さが続き、熱中症への厳重警戒が呼びかけられている。", url:"https://tenki.jp/forecaster/deskpart/2026/08/21/40242.html", date:"8/21"},
+        {category:"実技・専門系", tag:"高校野球", title:"夏の甲子園、本日22日決勝 智辯和歌山×健大高崎", summary:"智辯和歌山は5年ぶり、健大高崎は夏初の決勝進出。10時開始予定。", url:"https://koshien.hanshin.co.jp/highschool/summer2026/", date:"8/22"},
+        {category:"実技・専門系", tag:"AI", title:"AIの「再帰的自己改善」、まだ遠い道のりと新研究が指摘", summary:"人間の監督なしに自らを改良していくAIについて、答えのない研究課題への対応力はまだ不足しているとの分析。", url:"https://www.technologyreview.com/2026/08/19/1140195/the-download-ai-recursive-self-improvement-problem-heatwave-causes/", date:"8/19"},
+        {category:"医療・健康系", career_tag:"理学療法", tag:"理学療法", title:"診療報酬改定、疑義解釈(その11)を公表 看護・多職種協働加算など", summary:"リハビリ関連の算定要件について新たな解釈を国が示した。", url:"https://www.pt-ot-st.net/index.php/topics/", date:"8月"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"こども家庭庁、子育て支援に関する会議結果や政策文書を公表", summary:"子育て支援策の検討状況について複数の資料が公開された。", url:"https://www.cfa.go.jp/news", date:"8/21"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"経産省、2027年度予算でAI・半導体に重点配分へ 7.7兆円要求", summary:"成長分野への投資強化を掲げ、過去最大規模の要求となった。", url:"https://www.jiji.com/jc/list?g=eco", date:"8/20"},
+        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"エステ・脱毛サロンの倒産、1〜4月で過去最多の35件に", summary:"大手脱毛サロンの相次ぐ破綻で契約者が被害を受けるケースも。", url:"https://beautynewsjapan.com/", date:"5月"}
+      ]
+    }
   ];
 
-  const CATEGORIES = ["進路","経済","国際","社会","スポーツ","科学"];
-  let state = {category:"進路", careerTag:null};
+  const CATEGORIES = ["医療・健康系","教育・保育系","社会・ビジネス系","実技・専門系"];
+  const CAREER_TAGS = {
+    "医療・健康系": ["看護","作業療法","理学療法","臨床検査","栄養"],
+    "教育・保育系": ["教育","保育"],
+    "社会・ビジネス系": ["法学","経済","経営","国際関係","福祉"],
+    "実技・専門系": ["スポーツ科学","美容","調理"]
+  };
+  let state = {weekIndex: WEEKS.length - 1, category:CATEGORIES[0], careerTag:null};
+
+  // week selector
+  const weekSelect = document.getElementById('weekSelect');
+  weekSelect.innerHTML = WEEKS.map((w,i) =>
+    `<option value="${i}" ${i===state.weekIndex?'selected':''}>${w.label}${i===WEEKS.length-1?'(今週)':''}</option>`
+  ).reverse().join('');
+  weekSelect.addEventListener('change', e=>{
+    state.weekIndex = Number(e.target.value);
+    state.careerTag = null;
+    render();
+  });
 
   // date
   const today = new Date();
@@ -158,22 +203,19 @@
   });
 
   function render(){
-    // tag filter (only for 進路)
+    const weekArticles = WEEKS[state.weekIndex].articles;
+
+    // tag filter (career sub-fields, per category)
     const tagFilter = document.getElementById('tagFilter');
-    if(state.category === "進路"){
-      const tags = [...new Set(ARTICLES.filter(a=>a.category==="進路").map(a=>a.career_tag))];
-      tagFilter.classList.add('show');
-      tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
-        tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
-    }else{
-      tagFilter.classList.remove('show');
-      tagFilter.innerHTML = '';
-    }
+    const tags = CAREER_TAGS[state.category] || [];
+    tagFilter.classList.add('show');
+    tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
+      tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
 
     // board
     const board = document.getElementById('board');
-    let items = ARTICLES.filter(a => a.category === state.category);
-    if(state.category === "進路" && state.careerTag){
+    let items = weekArticles.filter(a => a.category === state.category);
+    if(state.careerTag){
       items = items.filter(a => a.career_tag === state.careerTag);
     }
     if(items.length === 0){
