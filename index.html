@@ -66,6 +66,11 @@
     padding:4px 11px; font-size:11.5px; cursor:pointer; border-radius:20px; font-family:inherit;
   }
   .tag-filter button.active{background:#c9432f; border-color:#c9432f; color:#fff;}
+  .tag-filter select{
+    background:#fdf6e3; color:#2a1c12; border:1px solid #543a26;
+    padding:5px 12px; font-size:12px; font-weight:700; font-family:inherit;
+    border-radius:20px;
+  }
 
   /* Cork board grid */
   .board{
@@ -255,7 +260,7 @@
     "社会・ビジネス系": ["法学","経済","経営","国際関係","福祉"],
     "実技・専門系": ["スポーツ科学","美容","調理"]
   };
-  let state = {weekIndex: WEEKS.length - 1, category:CATEGORIES[0], careerTag:null};
+  let state = {weekIndex: WEEKS.length - 1, category:CATEGORIES[0], careerTag:null, editorialDate:null};
 
   // breaking news banner (shows up to the newest 3 items)
   if(BREAKING.length > 0){
@@ -281,6 +286,7 @@
   weekSelect.addEventListener('change', e=>{
     state.weekIndex = Number(e.target.value);
     state.careerTag = null;
+    state.editorialDate = null;
     render();
   });
 
@@ -299,6 +305,7 @@
     if(e.target.tagName!=='BUTTON') return;
     state.category = e.target.dataset.cat;
     state.careerTag = null;
+    state.editorialDate = null;
     catTabs.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.cat===state.category));
     render();
   });
@@ -306,22 +313,35 @@
   function render(){
     const weekArticles = WEEKS[state.weekIndex].articles;
 
-    // tag filter (career sub-fields, per category)
+    // tag filter (career sub-fields per category, or a date dropdown for 社説)
     const tagFilter = document.getElementById('tagFilter');
-    const tags = CAREER_TAGS[state.category] || [];
-    if(tags.length === 0){
-      tagFilter.classList.remove('show');
-      tagFilter.innerHTML = '';
-    } else {
+    if(state.category === "社説"){
+      const dates = [...new Set(weekArticles.filter(a => a.category === "社説").map(a => a.date))];
       tagFilter.classList.add('show');
-      tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
-        tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
+      tagFilter.innerHTML = `<select id="editorialDateSelect">
+          <option value="__all">すべての日付</option>
+          ${dates.map(d => `<option value="${d}" ${state.editorialDate===d?'selected':''}>${d}</option>`).join('')}
+        </select>`;
+    } else {
+      const tags = CAREER_TAGS[state.category] || [];
+      if(tags.length === 0){
+        tagFilter.classList.remove('show');
+        tagFilter.innerHTML = '';
+      } else {
+        tagFilter.classList.add('show');
+        tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
+          tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
+      }
     }
 
     // board
     const board = document.getElementById('board');
     let items = weekArticles.filter(a => a.category === state.category);
-    if(state.careerTag){
+    if(state.category === "社説"){
+      if(state.editorialDate){
+        items = items.filter(a => a.date === state.editorialDate);
+      }
+    } else if(state.careerTag){
       items = items.filter(a => a.career_tag === state.careerTag);
     }
     if(items.length === 0){
@@ -342,6 +362,12 @@
   document.getElementById('tagFilter').addEventListener('click', e=>{
     if(e.target.tagName!=='BUTTON') return;
     state.careerTag = e.target.dataset.tag === '__all' ? null : e.target.dataset.tag;
+    render();
+  });
+
+  document.getElementById('tagFilter').addEventListener('change', e=>{
+    if(e.target.id !== 'editorialDateSelect') return;
+    state.editorialDate = e.target.value === '__all' ? null : e.target.value;
     render();
   });
 
