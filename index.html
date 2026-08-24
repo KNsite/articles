@@ -91,6 +91,10 @@
     display:inline-block; font-size:10px; font-weight:700; background:#c9432f; color:#fff;
     padding:2px 8px; margin-bottom:8px;
   }
+  .note.editorial{background:#f5efe0;}
+  .note.editorial::before{content:'🖋️';}
+  .note.editorial .tag{background:#2a3d66;}
+  .note.editorial .source{font-size:10px; color:#5c4a38; font-weight:700; margin-bottom:4px;}
   .note h3{font-size:15px; margin:0 0 6px; font-weight:700; line-height:1.45;}
   .note h3 a{color:#2a1c12; text-decoration:none;}
   .note h3 a:hover{text-decoration:underline;}
@@ -166,13 +170,31 @@
    ・毎朝、Claudeとのチャットでその日のニュースを検索してもらい、
      articles と同じ形式のJSONブロックを生成してもらう。
      生成されたブロックを最新週の articles 配列の末尾に貼り足すだけでOK。
-   ・category は以下の4つのいずれか:
-       "医療・健康系" | "教育・保育系" | "社会・ビジネス系" | "実技・専門系"
+   ・category は以下の5つのいずれか:
+       "医療・健康系" | "教育・保育系" | "社会・ビジネス系" | "実技・専門系" | "社説"
    ・career_tag は分野ごとの専門タグ(該当すれば付ける、一般ニュースは省略可):
        医療・健康系: 看護/作業療法/理学療法/臨床検査/栄養
        教育・保育系: 教育/保育
        社会・ビジネス系: 法学/経済/経営/国際関係/福祉
        実技・専門系: スポーツ科学/美容/調理
+
+   【社説・ニュース収集について】
+   ・shasetsu.jp(社説読み比べサイト)は読売・朝日・毎日・日経・産経など全国紙から
+     ブロック紙・地方紙まで、各社の社説へのリンクを日付順にまとめている。
+     ここを起点に各紙の社説を採用する。天声人語などの「1面コラム」は各紙とも
+     有料会員限定化が進んでいるが、「社説」欄はコラムとは別枠で、朝日・毎日・読売・
+     日経・産経いずれも基本的に無料で読める(読売は直接確認済み。他紙は環境の都合上
+     逐一のアクセス確認はできないことが多いが、一般に社説は無料公開区分のため採用可)。
+     もし特定の記事が有料壁に当たっていることが分かった場合は、その記事は除外する。
+   ・採用した記事は、内容に応じて「社説」枠と、4分野(医療・健康系/教育・保育系/
+     社会・ビジネス系/実技・専門系)の通常ニュース、どちらか一方または両方に載せる:
+       - 社説として読ませたい論説記事 → category:"社説", editorial:true,
+         source:"〇〇新聞 社説"(実際の新聞社名), tag:"社説"
+       - 分野に関連する時事ニュースとしても使える内容 → 該当分野に通常記事として
+         重複掲載(この場合は editorial/source を付けず、通常のtag/career_tagを使う)
+       - 社説以外でも、shasetsu.jp経由で見つけた無料記事が単に良質なニュースであれば、
+         通常のニュース記事として該当分野にそのまま載せてよい(社説枠は必須ではない)
+   ・出典は必ず新聞社の公式サイトのURLをそのまま使う(shasetsu.jpのURLではない)。
    ===================================================================== */
   const WEEKS = [
     {
@@ -204,12 +226,29 @@
         {category:"教育・保育系", career_tag:"保育", tag:"保育・幼稚園", title:"保育施設向け合同就職説明会、資格なしでも参加可能な形式で開催", summary:"保育士・幼稚園教諭に加え、栄養士や調理などの職種も一堂に会する催し。", url:"https://jsite.mhlw.go.jp/hokkaido-hellowork/", date:"7/12"},
         {category:"社会・ビジネス系", career_tag:"経営", tag:"商業", title:"都立商業高校、進路の多様さをPRするイベントを開催", summary:"簿記・マーケティング・起業など、商業高校での学びの幅広さを紹介した。", url:"https://news.toremaga.com/nation/eco/4129455.html", date:"8/9"},
         {category:"実技・専門系", career_tag:"スポーツ科学", tag:"スポーツ", title:"部活動の「地域展開」、2026年度から改革実行期間スタート", summary:"休日は原則地域クラブへ移行、平日も段階的に進める新方針が始まった。", url:"https://www.mext.go.jp/sports/b_menu/sports/mcatetop01/list/1372413_00003.htm", date:"8月"},
-        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"美容室のカット代、4〜6月期は前年同期比1.4%増 家計調査", summary:"物価上昇の中でも理美容サービスの利用は底堅く推移している。", url:"https://ribiyo-news.jp/", date:"8/7"}
+        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"美容室のカット代、4〜6月期は前年同期比1.4%増 家計調査", summary:"物価上昇の中でも理美容サービスの利用は底堅く推移している。", url:"https://ribiyo-news.jp/", date:"8/7"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"ＡＩの「暴走」 国際的な規制の強化策を急げ", summary:"AIのリスクをめぐり、各国が連携した規制強化の必要性を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260822-GYT1T00282/", date:"8/23"},
+        {category:"実技・専門系", career_tag:"", tag:"AI・社説", title:"ＡＩの「暴走」 国際的な規制の強化策を急げ", summary:"AIのリスクをめぐり、各国が連携した規制強化の必要性を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260822-GYT1T00282/", date:"8/23"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"人事院勧告 使命感を持てるような待遇に", summary:"公務員の給与のあり方について、使命感を持って働けるような処遇を求めた社説。", url:"https://www.yomiuri.co.jp/editorial/20260823-GYT1T00299/", date:"8/24"},
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"容疑者への発砲 警察官は身の安全をどう守る", summary:"容疑者への発砲をめぐり、警察官自身の安全確保のあり方を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260823-GYT1T00302/", date:"8/24"},
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"子どものSOSを見逃すな", summary:"子どもが発するSOSサインをどう受け止め対応するか、社会全体の課題として論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK207ZB0Q6A820C2000000/", date:"8/24"},
+        {category:"教育・保育系", career_tag:"教育", tag:"教育", title:"子どものSOSを見逃すな", summary:"子どもが発するSOSサインをどう受け止め対応するか、社会全体の課題として論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK207ZB0Q6A820C2000000/", date:"8/24"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"海図なき世界 北朝鮮の核問題 戦略の再構築を図らねば", summary:"北朝鮮の核問題をめぐり、これまでの対応を見直し戦略を再構築する必要性を論じた社説。", url:"https://mainichi.jp/articles/20260824/ddm/005/070/081000c", date:"8/24"},
+        {category:"医療・健康系", career_tag:"看護", tag:"看護", title:"入院した子の付き添い 家族の負担軽減が必要だ", summary:"入院する子どもに家族が付き添う負担の重さを取り上げ、支援の必要性を論じた社説。", url:"https://mainichi.jp/articles/20260821/ddm/005/070/072000c", date:"8/21"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"福祉", title:"ケアマネの平均年齢、55歳超える 進む高齢化 3人に1人は60歳以上", summary:"介護支援専門員(ケアマネ)の高齢化が一段と進んでいることが介護労働実態調査で判明。", url:"https://www.joint-kaigo.com/articles/48026/", date:"8月"},
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"夢の核融合は無理のない開発計画を", summary:"核融合発電の実用化に向け、過度に前のめりにならない着実な開発計画を求めた社説。", url:"https://www.nikkei.com/article/DGXZQODK216WD0R20C26A8000000/", date:"8/24"},
+        {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"アイヌ民族と差別 知ることで備えよう", summary:"アイヌ民族への差別の実態を知り、理解を広げることの大切さを論じた社説。", url:"https://www.asahi.com/articles/DA3S16531857.html", date:"8/24"},
+        {category:"医療・健康系", career_tag:"看護", tag:"看護", title:"看護師の不足感、病院や介護施設などで8割弱に SMS調査", summary:"全国の病院・介護施設の約8割が看護師不足を実感、働き方改革が遅れる職場も。", url:"https://www.joint-kaigo.com/articles/46348/", date:"8/24"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"eスポーツ", title:"高校eスポーツの祭典「STAGE:0 2026」が閉幕 過去最多8タイトルで日本一決定", summary:"のべ7311名の高校生が参加、大阪で全国大会グランドファイナルが開催された。", url:"https://esports-world.jp/report/64567", date:"8/16"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"日経平均、方向感定まらず 中東情勢と米長期金利に注目集まる", summary:"来週にかけてイラン制裁の行方やエヌビディア決算が株価の焦点になるとの見方。", url:"https://kabutan.jp/news/marketnews/?b=n202608240020", date:"8/24"}
       ]
     }
   ];
 
-  const CATEGORIES = ["医療・健康系","教育・保育系","社会・ビジネス系","実技・専門系"];
+  const CATEGORIES = ["医療・健康系","教育・保育系","社会・ビジネス系","実技・専門系","社説"];
   const CAREER_TAGS = {
     "医療・健康系": ["看護","作業療法","理学療法","臨床検査","栄養"],
     "教育・保育系": ["教育","保育"],
@@ -270,9 +309,14 @@
     // tag filter (career sub-fields, per category)
     const tagFilter = document.getElementById('tagFilter');
     const tags = CAREER_TAGS[state.category] || [];
-    tagFilter.classList.add('show');
-    tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
-      tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
+    if(tags.length === 0){
+      tagFilter.classList.remove('show');
+      tagFilter.innerHTML = '';
+    } else {
+      tagFilter.classList.add('show');
+      tagFilter.innerHTML = `<button data-tag="__all" class="${!state.careerTag?'active':''}">すべて</button>` +
+        tags.map(t => `<button data-tag="${t}" class="${state.careerTag===t?'active':''}">${t}</button>`).join('');
+    }
 
     // board
     const board = document.getElementById('board');
@@ -285,8 +329,9 @@
       return;
     }
     board.innerHTML = items.map(a => `
-      <div class="note">
+      <div class="note${a.editorial ? ' editorial' : ''}">
         <span class="tag">${a.tag}</span>
+        ${a.editorial ? `<div class="source">${a.source || ''}</div>` : ''}
         <h3><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></h3>
         <p>${a.summary}</p>
         <div class="meta">${a.date}更新</div>
