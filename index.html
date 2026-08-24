@@ -101,6 +101,23 @@
     text-align:center; color:#f6ead4; font-size:13px; padding:40px 0; grid-column:1/-1;
   }
 
+  /* Breaking news banner (up to 3 items, stacked) */
+  .breaking-wrap{ margin-bottom:22px; display:flex; flex-direction:column; gap:6px; }
+  .breaking-wrap.hide{ display:none; }
+  .breaking-banner{
+    background:#c9432f; color:#fff;
+    padding:10px 14px;
+    box-shadow:2px 3px 10px rgba(0,0,0,0.3);
+    display:flex; align-items:flex-start; gap:10px;
+  }
+  .breaking-banner .bmark{
+    background:#fff; color:#c9432f; font-weight:900; font-size:11px;
+    padding:2px 8px; flex-shrink:0; margin-top:2px;
+  }
+  .breaking-banner .btext a{color:#fff; text-decoration:underline; font-weight:700; font-size:13.5px;}
+  .breaking-banner .btext p{margin:4px 0 0; font-size:11.5px; opacity:0.9;}
+  .breaking-banner .btext .bmeta{font-size:10px; opacity:0.75; margin-top:4px;}
+
   footer{text-align:center; font-size:11px; color:#f0e0c8; margin-top:40px; letter-spacing:.08em;}
 </style>
 </head>
@@ -112,6 +129,8 @@
     <h1>あさかわら版</h1>
   </div>
   <div class="date-line" id="dateLine"></div>
+
+  <div class="breaking-wrap hide" id="breakingWrap"></div>
 
   <div class="week-select-wrap">
     <select id="weekSelect"></select>
@@ -125,6 +144,18 @@
 </div>
 
 <script>
+/* =====================================================================
+   速報ニュース(地震・災害など、緊急性の高いもの)
+   ---------------------------------------------------------------------
+   ・最新のものを配列の先頭に置く(表示は先頭から最大3件)。
+   ・古くなったら削除してOK(履歴として残す必要はない)。
+   ===================================================================== */
+  const BREAKING = [
+    {title:"「非常に強い」台風18号、25日以降に沖縄・奄美接近へ", summary:"暴風域に入る確率が80%超のエリアも。沿岸部では高波にも警戒が必要。", url:"https://weathernews.jp/news/202608/240051/", date:"8/24"},
+    {title:"浦河沖でM6.0、震度4の地震 津波の心配なし", summary:"8月23日22時45分ごろ発生。北海道浦河町などで震度4を観測した。", url:"https://emergency-weather.yahoo.co.jp/weather/jp/earthquake/", date:"8/23"},
+    {title:"千葉の記録的豪雨、死者13人に 浸水2300棟超", summary:"放置車両も600台に上り、復旧作業が続いている。", url:"https://www.jiji.com/jc/archives?g=soc_archive_0", date:"8/18"}
+  ];
+
 /* =====================================================================
    記事データ(ここを毎朝更新する) — 週ごとのアーカイブ構造
    ---------------------------------------------------------------------
@@ -153,12 +184,27 @@
         {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"円相場、1ドル159円台で推移 中東情勢や米国債買い戻しが影響", summary:"介入警戒感を残しつつ160円の節目が意識される展開に。", url:"https://www.nikkei.com/markets/currencies/", date:"8/21"},
         {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際", title:"ホルムズ海峡めぐりイランは強硬姿勢崩さず、米軍は封鎖維持の構え", summary:"貨物船攻撃も相次ぎ、中東情勢の緊迫が続いている。", url:"https://www.jiji.com/jc/archives?g=int_archive_0", date:"8/12"},
         {category:"社会・ビジネス系", tag:"社会・天気", title:"西日本で38℃超の猛暑、22日は九州で40℃に迫る予想", summary:"来週前半にかけても厳しい暑さが続き、熱中症への厳重警戒が呼びかけられている。", url:"https://tenki.jp/forecaster/deskpart/2026/08/21/40242.html", date:"8/21"},
-        {category:"実技・専門系", tag:"高校野球", title:"夏の甲子園、本日22日決勝 智辯和歌山×健大高崎", summary:"智辯和歌山は5年ぶり、健大高崎は夏初の決勝進出。10時開始予定。", url:"https://koshien.hanshin.co.jp/highschool/summer2026/", date:"8/22"},
+        {category:"実技・専門系", tag:"高校野球", title:"智辯和歌山、5年ぶり4度目の優勝 健大高崎に逆転勝ち", summary:"終盤に逆転した智辯和歌山が4対3で競り勝ち、夏の甲子園を制した。", url:"https://baseball.yahoo.co.jp/hsb_summer/game/2021048527/top", date:"8/22"},
         {category:"実技・専門系", tag:"AI", title:"AIの「再帰的自己改善」、まだ遠い道のりと新研究が指摘", summary:"人間の監督なしに自らを改良していくAIについて、答えのない研究課題への対応力はまだ不足しているとの分析。", url:"https://www.technologyreview.com/2026/08/19/1140195/the-download-ai-recursive-self-improvement-problem-heatwave-causes/", date:"8/19"},
         {category:"医療・健康系", career_tag:"理学療法", tag:"理学療法", title:"診療報酬改定、疑義解釈(その11)を公表 看護・多職種協働加算など", summary:"リハビリ関連の算定要件について新たな解釈を国が示した。", url:"https://www.pt-ot-st.net/index.php/topics/", date:"8月"},
         {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"こども家庭庁、子育て支援に関する会議結果や政策文書を公表", summary:"子育て支援策の検討状況について複数の資料が公開された。", url:"https://www.cfa.go.jp/news", date:"8/21"},
         {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"経産省、2027年度予算でAI・半導体に重点配分へ 7.7兆円要求", summary:"成長分野への投資強化を掲げ、過去最大規模の要求となった。", url:"https://www.jiji.com/jc/list?g=eco", date:"8/20"},
-        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"エステ・脱毛サロンの倒産、1〜4月で過去最多の35件に", summary:"大手脱毛サロンの相次ぐ破綻で契約者が被害を受けるケースも。", url:"https://beautynewsjapan.com/", date:"5月"}
+        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"エステ・脱毛サロンの倒産、1〜4月で過去最多の35件に", summary:"大手脱毛サロンの相次ぐ破綻で契約者が被害を受けるケースも。", url:"https://beautynewsjapan.com/", date:"5月"},
+        {category:"医療・健康系", career_tag:"栄養", tag:"栄養", title:"「骨太方針2026」を閣議決定、栄養・栄養教諭に関する記載が3カ所に", summary:"学校での栄養指導の充実などが政府方針に盛り込まれた。", url:"https://www.dietitian.or.jp/trends/", date:"6月"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"福祉", title:"日本福祉大学、高校生・大学生対象の「ふくし探究学習交流会」を開催", summary:"福祉分野への関心を広げる交流イベントが東海キャンパスで行われた。", url:"https://www.n-fukushi.ac.jp/", date:"8/1"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"4〜6月期GDP、年率2.2%増に上方修正 市場予想を上回る", summary:"個人消費や設備投資が上振れし、前回発表の1.8%から改善した。", url:"https://gold.bullionvault.jp/", date:"8/17"},
+        {category:"社会・ビジネス系", tag:"社会", title:"滋賀・野洲の工場で事故、搬送の2人死亡 酸欠か", summary:"詳しい原因を警察と労働基準監督署が調べている。", url:"https://www.nikkei.com/news/category/", date:"8/23"},
+        {category:"社会・ビジネス系", tag:"社会・天気", title:"台風20号の影響、沖縄・八重山地方で線状降水帯発生のおそれ", summary:"先島諸島では大雨となっており、土砂災害や河川の氾濫に厳重な警戒が呼びかけられている。", url:"https://ryukyushimpo.jp/news/entry-5477464.html", date:"8/23"},
+        {category:"社会・ビジネス系", tag:"社会・天気", title:"「トリプル台風」発生中、台風18号は週半ばに沖縄接近へ", summary:"18号・19号・20号が同時に発生し、九州から関東でも危険な暑さが続いている。", url:"https://weathernews.jp/news/202608/220311/", date:"8/23"},
+        {category:"実技・専門系", tag:"科学技術", title:"光量子コンピューター、研究拠点で稼働開始 商用化目指し世界初", summary:"実用化に向けた研究開発拠点として、光を使った量子コンピューターが動き出した。", url:"https://www.tsukuba-sci.com/", date:"8/3"},
+        {category:"実技・専門系", tag:"科学技術", title:"レーザーで金属の組成を自在に操作、大阪公立大が新技術", summary:"「ハイエントロピー合金」と呼ばれる新素材をレーザーで作製する技術を開発。", url:"https://www.tsukuba-sci.com/", date:"8/6"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"改正個人情報保護法が公布 課徴金制度を新設、子どもの情報保護も強化", summary:"企業への制裁強化に加え、子どもの個人情報の取り扱いに関する新ルールが盛り込まれた。", url:"https://www.businesslawyers.jp/articles", date:"7/17"},
+        {category:"実技・専門系", career_tag:"調理", tag:"調理", title:"辻調理師専門学校の教員が「アカデミー銀章」を受章", summary:"全日本司厨士協会が、日頃の功績をたたえて表彰した。", url:"https://www.tsuji.ac.jp/", date:"8/6"},
+        {category:"医療・健康系", career_tag:"理学療法", tag:"リハビリ", title:"VR活用リハビリ、脳卒中患者の腕の機能回復に有用と報告", summary:"仮想現実(VR)を使った訓練が、従来のリハビリを補う手法として注目されている。", url:"https://www.carenet.com/rehabili", date:"7/21"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育・幼稚園", title:"保育施設向け合同就職説明会、資格なしでも参加可能な形式で開催", summary:"保育士・幼稚園教諭に加え、栄養士や調理などの職種も一堂に会する催し。", url:"https://jsite.mhlw.go.jp/hokkaido-hellowork/", date:"7/12"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"商業", title:"都立商業高校、進路の多様さをPRするイベントを開催", summary:"簿記・マーケティング・起業など、商業高校での学びの幅広さを紹介した。", url:"https://news.toremaga.com/nation/eco/4129455.html", date:"8/9"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"スポーツ", title:"部活動の「地域展開」、2026年度から改革実行期間スタート", summary:"休日は原則地域クラブへ移行、平日も段階的に進める新方針が始まった。", url:"https://www.mext.go.jp/sports/b_menu/sports/mcatetop01/list/1372413_00003.htm", date:"8月"},
+        {category:"実技・専門系", career_tag:"美容", tag:"美容", title:"美容室のカット代、4〜6月期は前年同期比1.4%増 家計調査", summary:"物価上昇の中でも理美容サービスの利用は底堅く推移している。", url:"https://ribiyo-news.jp/", date:"8/7"}
       ]
     }
   ];
@@ -171,6 +217,22 @@
     "実技・専門系": ["スポーツ科学","美容","調理"]
   };
   let state = {weekIndex: WEEKS.length - 1, category:CATEGORIES[0], careerTag:null};
+
+  // breaking news banner (shows up to the newest 3 items)
+  if(BREAKING.length > 0){
+    const wrap = document.getElementById('breakingWrap');
+    wrap.classList.remove('hide');
+    wrap.innerHTML = BREAKING.slice(0, 3).map(b => `
+      <div class="breaking-banner">
+        <div class="bmark">速報</div>
+        <div class="btext">
+          <a href="${b.url}" target="_blank" rel="noopener">${b.title}</a>
+          <p>${b.summary}</p>
+          <div class="bmeta">${b.date}</div>
+        </div>
+      </div>
+    `).join('');
+  }
 
   // week selector
   const weekSelect = document.getElementById('weekSelect');
