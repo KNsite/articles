@@ -160,7 +160,7 @@
    ・古くなったら削除してOK(履歴として残す必要はない)。
    ===================================================================== */
   const BREAKING = [
-    {title:"「非常に強い」台風18号、25日以降に沖縄・奄美接近へ", summary:"暴風域に入る確率が80%超のエリアも。沿岸部では高波にも警戒が必要。", url:"https://weathernews.jp/news/202608/240051/", date:"8/24"},
+    {title:"台風18号、南大東島に最接近 今夜には沖縄・奄美も暴風域に", summary:"大東島地方は既に暴風域に入り最大瞬間風速42.2m/sを観測。沖縄本島・奄美も25日夜に暴風域入りの見込みで、26日午後まで荒天が続く。", url:"https://weathernews.jp/news/202608/250061/", date:"8/25"},
     {title:"浦河沖でM6.0、震度4の地震 津波の心配なし", summary:"8月23日22時45分ごろ発生。北海道浦河町などで震度4を観測した。", url:"https://emergency-weather.yahoo.co.jp/weather/jp/earthquake/", date:"8/23"},
     {title:"千葉の記録的豪雨、死者13人に 浸水2300棟超", summary:"放置車両も600台に上り、復旧作業が続いている。", url:"https://www.jiji.com/jc/archives?g=soc_archive_0", date:"8/18"}
   ];
@@ -183,12 +183,24 @@
        社会・ビジネス系: 法学/経済/経営/国際関係/福祉
        実技・専門系: スポーツ科学/美容/調理
 
+   【速報(breaking news)について】
+   ・速報として載せたい記事には breaking:true と posted:"YYYY-MM-DD"(掲載日、
+     ISO形式)を付ける。掲載日から3日経過すると画面上に自動的に表示されなくなる
+     (データからは消えないが、非表示になる)。
+     例: {category:"社会・ビジネス系", career_tag:"経済", tag:"速報", breaking:true,
+          posted:"2026-08-25", title:"...", summary:"...", url:"...", date:"8/25"}
+   ・速報でない通常記事・社説には breaking/posted は付けなくてよい(その場合は
+     何日経っても表示され続ける)。
+
    【社説・ニュース収集について】
-   ・shasetsu.jp(社説読み比べサイト)は読売・朝日・毎日・日経・産経など全国紙から
-     ブロック紙・地方紙まで、各社の社説へのリンクを日付順にまとめている。
-     ここを起点に各紙の社説を採用する。天声人語などの「1面コラム」は各紙とも
-     有料会員限定化が進んでいるが、「社説」欄はコラムとは別枠で、朝日・毎日・読売・
-     日経・産経いずれも基本的に無料で読める(読売は直接確認済み。他紙は環境の都合上
+   ・shasetsu.jp(社説読み比べサイト)は読売・朝日・毎日・日経・産経など全国紙に加え、
+     北海道新聞・京都新聞・中日新聞などのブロック紙、紀伊民報など各地の地方紙まで、
+     各社の社説へのリンクを日付順にまとめている。全国紙だけでなくブロック紙・地方紙
+     も積極的に対象に含める(和歌山の地方紙「紀伊民報」は独自の社説ページがshasetsu.jp
+     上で見つからない場合があるので、その際は近隣の京都新聞・神戸新聞・奈良新聞など
+     関西のブロック紙・地方紙で代替してよい)。天声人語などの「1面コラム」は各紙とも
+     有料会員限定化が進んでいるが、「社説」欄はコラムとは別枠で、全国紙・ブロック紙・
+     地方紙いずれも基本的に無料で読める(読売・京都新聞は直接確認済み。他紙は環境の都合上
      逐一のアクセス確認はできないことが多いが、一般に社説は無料公開区分のため採用可)。
      もし特定の記事が有料壁に当たっていることが分かった場合は、その記事は除外する。
    ・採用した記事は、内容に応じて「社説」枠と、4分野(医療・健康系/教育・保育系/
@@ -200,12 +212,13 @@
        - 社説以外でも、shasetsu.jp経由で見つけた無料記事が単に良質なニュースであれば、
          通常のニュース記事として該当分野にそのまま載せてよい(社説枠は必須ではない)
    ・出典は必ず新聞社の公式サイトのURLをそのまま使う(shasetsu.jpのURLではない)。
+   ・新しい記事は必ず articles 配列の末尾に追加すること(画面側で自動的に新しい
+     ものほど上に表示される仕組みになっている)。
    ===================================================================== */
   const WEEKS = [
     {
       label: "8/22〜8/28",
-      articles: [
-        {category:"医療・健康系", career_tag:"看護", tag:"看護・医療", title:"日本看護協会、看護職の処遇改善と教育体制強化を厚労省へ要望", summary:"在宅・施設領域の看護職員の処遇改善などを求める要望を提出。", url:"https://www.nurse.or.jp/home/about/newsrelease/", date:"5/28"},
+      articles: [        {category:"医療・健康系", career_tag:"看護", tag:"看護・医療", title:"日本看護協会、看護職の処遇改善と教育体制強化を厚労省へ要望", summary:"在宅・施設領域の看護職員の処遇改善などを求める要望を提出。", url:"https://www.nurse.or.jp/home/about/newsrelease/", date:"5/28"},
         {category:"教育・保育系", career_tag:"保育", tag:"保育・教育", title:"保育士の配置基準改善、1歳児加算の運用が本格化", summary:"1歳児は5人に1人体制への加算が広がりつつあるが、実施率は自治体差も。", url:"https://ichitasu.co.jp/hoikushi-haichi", date:"7/1"},
         {category:"実技・専門系", career_tag:"スポーツ科学", tag:"スポーツ科学", title:"熊本地震の被災地で熱中症予防アプリを産業医科大学が開発", summary:"避難所生活者向けに、暑さ対策を支援するアプリを提供。", url:"https://www.cbnews.jp/medical", date:"8/6"},
         {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"円相場、1ドル159円台で推移 中東情勢や米国債買い戻しが影響", summary:"介入警戒感を残しつつ160円の節目が意識される展開に。", url:"https://www.nikkei.com/markets/currencies/", date:"8/21"},
@@ -244,11 +257,64 @@
         {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"海図なき世界 北朝鮮の核問題 戦略の再構築を図らねば", summary:"北朝鮮の核問題をめぐり、これまでの対応を見直し戦略を再構築する必要性を論じた社説。", url:"https://mainichi.jp/articles/20260824/ddm/005/070/081000c", date:"8/24"},
         {category:"医療・健康系", career_tag:"看護", tag:"看護", title:"入院した子の付き添い 家族の負担軽減が必要だ", summary:"入院する子どもに家族が付き添う負担の重さを取り上げ、支援の必要性を論じた社説。", url:"https://mainichi.jp/articles/20260821/ddm/005/070/072000c", date:"8/21"},
         {category:"社会・ビジネス系", career_tag:"福祉", tag:"福祉", title:"ケアマネの平均年齢、55歳超える 進む高齢化 3人に1人は60歳以上", summary:"介護支援専門員(ケアマネ)の高齢化が一段と進んでいることが介護労働実態調査で判明。", url:"https://www.joint-kaigo.com/articles/48026/", date:"8月"},
+
+        {category:"社説", editorial:true, source:"産経新聞 社説", tag:"社説", title:"高額療養費制度 負担増の影響を注視せよ", summary:"高額療養費制度の見直しによる患者負担増が医療現場に与える影響を注視すべきだと論じた社説。", url:"https://www.sankei.com/article/20260824-GDPXB73T5RNAFGQP6J6UBS3LB4/", date:"8/24"},
+        {category:"社説", editorial:true, source:"産経新聞 社説", tag:"社説", title:"露朝の軍事協力 日本にも直結する脅威だ", summary:"ロシアと北朝鮮の軍事協力の深化が日本の安全保障に直結する脅威になっていると論じた社説。", url:"https://www.sankei.com/article/20260824-NQ2LZAGZVZLZHB7UPB6CT7HEBI/", date:"8/24"},
+        {category:"医療・健康系", career_tag:"看護", tag:"看護", title:"高額療養費制度 負担増の影響を注視せよ", summary:"高額療養費制度の見直しによる患者負担増が医療現場に与える影響を注視すべきだと論じた社説。", url:"https://www.sankei.com/article/20260824-GDPXB73T5RNAFGQP6J6UBS3LB4/", date:"8/24"},
+        {category:"社説", editorial:true, source:"京都新聞 社説", tag:"社説", title:"水産資源の危機 適切な管理と温暖化対策を", summary:"水産資源の減少をめぐり、適切な資源管理と温暖化対策の両面からの取り組みを論じた社説。", url:"https://www.kyoto-np.co.jp/articles/-/1776520", date:"8/23"},
+        {category:"実技・専門系", career_tag:"調理", tag:"調理", title:"全国高校生料理コンクール 各地の高校生が地域食材のオリジナルレシピを競う", summary:"日清製粉グループ主催、全国の高校生が地元食材を使ったオリジナル料理・菓子を競うコンクール。", url:"https://www.nisshin.com/sustainability/highschool/", date:"8月"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"ネタバレサイト 映画へのただ乗りは許されぬ", summary:"映画の内容を無断で暴露するネタバレサイトについて、著作権侵害の問題を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260822-GYT1T00285/", date:"8/23"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"ネタバレサイト 映画へのただ乗りは許されぬ", summary:"映画の内容を無断で暴露するネタバレサイトについて、著作権侵害の問題を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260822-GYT1T00285/", date:"8/23"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"第7回「アトツギ甲子園」エントリー受付開始 39歳以下の後継者が新規事業アイデアを競う", summary:"中小企業庁主催、家業を継ぐ若手後継者が経営資源を生かした新規事業プランを競うピッチイベント。", url:"https://atotsugi-koshien.go.jp/", date:"8/3"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"「こども誰でも通園制度」全国で本格スタート 保護者の就労有無問わず保育施設利用可能に", summary:"0歳6か月〜3歳未満が対象、保育施設の受け皿不足や保育人材確保が今後の課題として指摘されている。", url:"https://www.businessinsider.jp/article/69a619f2-0376-4ba4-93b3-9257fc565563/", date:"4月〜"},
         {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"夢の核融合は無理のない開発計画を", summary:"核融合発電の実用化に向け、過度に前のめりにならない着実な開発計画を求めた社説。", url:"https://www.nikkei.com/article/DGXZQODK216WD0R20C26A8000000/", date:"8/24"},
         {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"アイヌ民族と差別 知ることで備えよう", summary:"アイヌ民族への差別の実態を知り、理解を広げることの大切さを論じた社説。", url:"https://www.asahi.com/articles/DA3S16531857.html", date:"8/24"},
         {category:"医療・健康系", career_tag:"看護", tag:"看護", title:"看護師の不足感、病院や介護施設などで8割弱に SMS調査", summary:"全国の病院・介護施設の約8割が看護師不足を実感、働き方改革が遅れる職場も。", url:"https://www.joint-kaigo.com/articles/46348/", date:"8/24"},
         {category:"実技・専門系", career_tag:"スポーツ科学", tag:"eスポーツ", title:"高校eスポーツの祭典「STAGE:0 2026」が閉幕 過去最多8タイトルで日本一決定", summary:"のべ7311名の高校生が参加、大阪で全国大会グランドファイナルが開催された。", url:"https://esports-world.jp/report/64567", date:"8/16"},
-        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"日経平均、方向感定まらず 中東情勢と米長期金利に注目集まる", summary:"来週にかけてイラン制裁の行方やエヌビディア決算が株価の焦点になるとの見方。", url:"https://kabutan.jp/news/marketnews/?b=n202608240020", date:"8/24"}
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"日経平均、方向感定まらず 中東情勢と米長期金利に注目集まる", summary:"来週にかけてイラン制裁の行方やエヌビディア決算が株価の焦点になるとの見方。", url:"https://kabutan.jp/news/marketnews/?b=n202608240020", date:"8/24"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"ＡＩ基本原則 これで知的財産を守れるのか", summary:"AI基本原則をめぐり、知的財産の保護が十分に図られているかを問うた社説。", url:"https://www.yomiuri.co.jp/editorial/20260824-GYT1T00331/", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"ＡＩ基本原則 これで知的財産を守れるのか", summary:"AI基本原則をめぐり、知的財産の保護が十分に図られているかを問うた社説。", url:"https://www.yomiuri.co.jp/editorial/20260824-GYT1T00331/", date:"8/25"},
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"福岡県議長辞職 旧態依然の体質にあきれる", summary:"福岡県議会議長の辞職をめぐり、旧態依然とした議会の体質を問うた社説。", url:"https://www.yomiuri.co.jp/editorial/20260824-GYT1T00334/", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"第19回高校生模擬裁判選手権 各地で大会開催、検察官・弁護人役で刑事裁判を実演", summary:"日本弁護士連合会主催、高校生が実際の法廷を使い争点整理から証人尋問まで行う「実演型模擬裁判」。", url:"https://www.nichibenren.or.jp/event/year/2026/260801.html", date:"8/1"},
+
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"企業は環境対応や人材戦略を市場に語れ", summary:"上場企業に対し、環境対応や人材戦略を投資家に分かりやすく発信する必要性を論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK245T00U6A820C2000000/", date:"8/25"},
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"マンション修繕の不正根絶を", summary:"マンションの大規模修繕工事をめぐる不正・談合の根絶を求めた社説。", url:"https://www.nikkei.com/article/DGXZQODK243D50U6A820C2000000/", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"マンション修繕の不正根絶を", summary:"マンションの大規模修繕工事をめぐる不正・談合の根絶を求めた社説。", url:"https://www.nikkei.com/article/DGXZQODK243D50U6A820C2000000/", date:"8/25"},
+        {category:"医療・健康系", career_tag:"理学療法", tag:"理学療法", title:"高校サッカー選手権大会メディカルスタッフを募集 理学療法士が現場でケガ対応をサポート", summary:"愛媛県理学療法士会が大会期間中、選手のケガの応急対応などを行うメディカルスタッフを募っている。", url:"https://www.epta.jp/cms/?p=5719", date:"8月"},
+
+        {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"家事支援・ベビーシッターの利用に税制優遇へ 経産省など要望方針", summary:"仕事と子育て・介護の両立を後押ししようと、家事支援サービスやベビーシッター利用者への税制優遇を求める要望を提出する方針が示された。", url:"https://news.web.nhk/newsweb/na/nd-20260823de45888", date:"8/24"},
+        {category:"教育・保育系", career_tag:"教育", tag:"教育・SNS", title:"SNS利用による子どもへの影響、IT大手が予防対策を強化", summary:"SNSの過度な利用が子どもの心身に及ぼす影響が懸念される中、大手IT企業が保護者への通知機能など被害の未然防止に向けた取り組みを広げている。", url:"https://news.web.nhk/newsweb/na/nd-20260823de45889", date:"8/24"},
+
+        {category:"社説", editorial:true, source:"北海道新聞 社説", tag:"社説", title:"新学期の子ども 安心できる環境整えて", summary:"新学期を迎える時期は子どもの心が不安定になりやすいとして、大人が声に耳を傾け、相談しやすい環境や居場所を整える必要性を論じた社説。", url:"https://www.hokkaido-np.co.jp/article/1357772/", date:"8/24"},
+        {category:"教育・保育系", career_tag:"教育", tag:"教育", title:"新学期の子ども 安心できる環境整えて", summary:"新学期を迎える時期は子どもの心が不安定になりやすいとして、大人が声に耳を傾け、相談しやすい環境や居場所を整える必要性を論じた社説。", url:"https://www.hokkaido-np.co.jp/article/1357772/", date:"8/24"},
+
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"東京23区の中古マンション価格、2カ月連続で下落 都心も頭打ちか", summary:"東京23区の中古マンション平均価格(70平方メートル換算)が前月比で2カ月連続の下落となり、都心部でも価格上昇の鈍化がうかがえるとの指摘が出ている。", url:"https://news.web.nhk/newsweb/na/nd-20260824de45945", date:"8/24"},
+
+        {category:"社説", editorial:true, source:"産経新聞 主張", tag:"社説", title:"東武線事故で捜索 安全管理の欠陥解明せよ", summary:"東武線の特急事故をめぐる家宅捜索を受け、安全管理体制の欠陥を徹底的に解明する必要性を論じた社説。", url:"https://www.sankei.com/article/20260825-PREFAUSY6VMJBATUFYDZFEM6UQ/", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"東武線事故で捜索 安全管理の欠陥解明せよ", summary:"東武線の特急事故をめぐる家宅捜索を受け、安全管理体制の欠陥を徹底的に解明する必要性を論じた社説。", url:"https://www.sankei.com/article/20260825-PREFAUSY6VMJBATUFYDZFEM6UQ/", date:"8/25"},
+
+        {category:"社説", editorial:true, source:"産経新聞 主張", tag:"社説", title:"玉城沖縄県知事 国防の重任へ理解足りぬ", summary:"沖縄県の玉城知事に対し、国防をめぐる重い責任への理解が足りないと指摘した社説。", url:"https://www.sankei.com/article/20260825-73JV456OR5J3RAV5JSERSIHOBM/", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際関係", title:"玉城沖縄県知事 国防の重任へ理解足りぬ", summary:"沖縄県の玉城知事に対し、国防をめぐる重い責任への理解が足りないと指摘した社説。", url:"https://www.sankei.com/article/20260825-73JV456OR5J3RAV5JSERSIHOBM/", date:"8/25"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"高市内閣の防衛白書 増強路線への検証乏しい", summary:"防衛力の増強路線を打ち出した防衛白書に対し、その妥当性についての検証が不十分だと指摘した社説。", url:"https://mainichi.jp/articles/20260825/ddm/005/070/094000c", date:"8/25"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"国会の憲法改正論議 発議ありきで必要感じぬ", summary:"国会での憲法改正論議について、発議することが前提となっており、改正の必要性に関する議論が深まっていないと論じた社説。", url:"https://mainichi.jp/articles/20260825/ddm/005/070/095000c", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"国会の憲法改正論議 発議ありきで必要感じぬ", summary:"国会での憲法改正論議について、発議することが前提となっており、改正の必要性に関する議論が深まっていないと論じた社説。", url:"https://mainichi.jp/articles/20260825/ddm/005/070/095000c", date:"8/25"},
+
+        {category:"社説", editorial:true, source:"中日新聞 社説", tag:"社説", title:"千葉の豪雨災害 「車のリスク」再認識を", summary:"千葉県で相次いだ豪雨災害を受け、水害時の車の運転に伴う危険性を改めて認識する必要があると論じた社説。", url:"https://www.chunichi.co.jp/article/1301199", date:"8/25"},
+
+        {category:"社説", editorial:true, source:"中日新聞 社説", tag:"社説", title:"韓国与党新代表 議員交流を加速したい", summary:"韓国与党の新代表就任を受け、日韓の議員交流をさらに加速させたいとの期待を論じた社説。", url:"https://www.chunichi.co.jp/article/1301200", date:"8/25"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際関係", title:"韓国与党新代表 議員交流を加速したい", summary:"韓国与党の新代表就任を受け、日韓の議員交流をさらに加速させたいとの期待を論じた社説。", url:"https://www.chunichi.co.jp/article/1301200", date:"8/25"},
+
+        {category:"社説", editorial:true, source:"北海道新聞 社説", tag:"社説", title:"残業時間見直し 働く人の健康守れるか", summary:"残業時間の上限規制見直しの議論をめぐり、働く人の健康確保が置き去りにされていないか懸念を示した社説。", url:"https://www.hokkaido-np.co.jp/article/1357770/", date:"8/24"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"残業時間見直し 働く人の健康守れるか", summary:"残業時間の上限規制見直しの議論をめぐり、働く人の健康確保が置き去りにされていないか懸念を示した社説。", url:"https://www.hokkaido-np.co.jp/article/1357770/", date:"8/24"},
+
+        {category:"実技・専門系", tag:"高校野球", title:"夏の甲子園を終え、高校野球秋季大会が各地で開幕", summary:"岩手・福島・和歌山・兵庫など各地で、来春のセンバツ甲子園につながる秋季大会が始まった。", url:"https://www.xn--8wv97xz6xo7h.online/report-2026-0824/", date:"8/24"},
+
+        {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"香港支連会判決 ろうそくの火は消せぬ", summary:"香港の民主派団体「支連会」幹部への有罪判決を受け、当局の弾圧が続いても市民が灯してきた祈りの火は消せないと論じた社説。", url:"https://www.asahi.com/articles/DA3S16531859.html", date:"8/24"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際関係", title:"香港支連会判決 ろうそくの火は消せぬ", summary:"香港の民主派団体「支連会」幹部への有罪判決を受け、当局の弾圧が続いても市民が灯してきた祈りの火は消せないと論じた社説。", url:"https://www.asahi.com/articles/DA3S16531859.html", date:"8/24"}
       ]
     }
   ];
@@ -296,6 +362,15 @@
   document.getElementById('dateLine').textContent =
     `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日(${days[today.getDay()]}) 更新`;
 
+  // 速報(breaking news) auto-expiry: items with breaking:true and a posted:"YYYY-MM-DD"
+  // date are hidden once 3 days have passed since that date.
+  function isExpiredBreaking(a){
+    if(!a.breaking || !a.posted) return false;
+    const posted = new Date(a.posted + "T00:00:00");
+    const diffDays = (today - posted) / (1000*60*60*24);
+    return diffDays >= 3;
+  }
+
   // category tabs
   const catTabs = document.getElementById('catTabs');
   catTabs.innerHTML = CATEGORIES.map(c =>
@@ -336,7 +411,7 @@
 
     // board
     const board = document.getElementById('board');
-    let items = weekArticles.filter(a => a.category === state.category);
+    let items = weekArticles.filter(a => a.category === state.category && !isExpiredBreaking(a)).reverse();
     if(state.category === "社説"){
       if(state.editorialDate){
         items = items.filter(a => a.date === state.editorialDate);
