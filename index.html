@@ -159,9 +159,7 @@
    ・最新のものを配列の先頭に置く(表示は先頭から最大3件)。
    ・古くなったら削除してOK(履歴として残す必要はない)。
    ===================================================================== */
-  const BREAKING = [
-    {title:"石川・富山にレベル5大雨特別警報 記録的豪雨、28日にかけ北陸で厳重警戒", summary:"27日朝、石川県羽咋市・志賀町・宝達志水町・中能登町と富山県氷見市に最高レベルの大雨特別警報が発表され、浸水や土砂災害がすでに発生。前線は28日にかけて南下し、北陸を中心に200ミリ前後の大雨が続く見込みで、河川の増水や土砂災害に引き続き厳重な警戒が呼びかけられている。", url:"https://tenki.jp/forecaster/gureweather/2026/08/27/40324.html", date:"8/28"}
-  ];
+  const BREAKING = [];
 
 /* =====================================================================
    記事データ(ここを毎朝更新する) — 週ごとのアーカイブ構造
@@ -459,6 +457,48 @@
 
         {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"増加する外来種 生態系守る意識高めたい", summary:"国内で増加する外来種の問題を取り上げ、生態系を守る意識を高めていく必要性を論じた社説。", url:"https://mainichi.jp/articles/20260828/ddm/005/070/102000c", date:"8/28"},
         {category:"実技・専門系", tag:"科学技術・社説", title:"増加する外来種 生態系守る意識高めたい", summary:"国内で増加する外来種の問題を取り上げ、生態系を守る意識を高めていく必要性を論じた社説。", url:"https://mainichi.jp/articles/20260828/ddm/005/070/102000c", date:"8/28"}
+      ]
+    },
+    {
+      label: "8/29〜9/4",
+      articles: [
+        {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"待機児童2,435人、9年ぶりに増加 こども家庭庁が公表", summary:"2026年4月時点の保育所待機児童数が前年より181人増の2435人となり、9年ぶりに増加に転じた。約96%が3歳未満児で、都市部が全体の半数近くを占める。", url:"https://reseed.resemom.jp/article/2026/08/28/14003.html", date:"8/28"},
+
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"日経平均反発、前日比273円高の6万6405円で終値", summary:"28日の東京株式市場で日経平均株価は反発し、AI・半導体関連銘柄が買われる一方、商いは薄く上値の重い展開となった。", url:"https://www.nikkei.com/article/DGXZQOFL280H00Y6A820C2000000/", date:"8/28"},
+
+        {category:"実技・専門系", tag:"高校野球", title:"高校野球秋季大会、岩手・秋田・山形・福島・兵庫・福岡などで開幕", summary:"来春のセンバツ甲子園につながる秋季大会が各地で始まり、山梨・埼玉・新潟・石川などでは組み合わせ抽選会も行われた。", url:"https://www.xn--8wv97xz6xo7h.online/report-2026-0828/", date:"8/28"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"ネパール土石流 被災地への国際支援が急務だ", summary:"ネパールで発生した大規模な土石流をめぐり、被災地への国際的な支援強化の必要性を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260829-GYT1T00009/", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際関係", title:"ネパール土石流 被災地への国際支援が急務だ", summary:"ネパールで発生した大規模な土石流をめぐり、被災地への国際的な支援強化の必要性を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260829-GYT1T00009/", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"電子投票 成功例重ねて普及を急ぎたい", summary:"電子投票の導入をめぐり、成功事例を積み重ねながら普及を急ぐべきだと論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260828-GYT1T00398/", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"電子投票 成功例重ねて普及を急ぎたい", summary:"電子投票の導入をめぐり、成功事例を積み重ねながら普及を急ぐべきだと論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260828-GYT1T00398/", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"イラン攻撃半年 覚書生かす外交を探れ", summary:"米国等によるイラン攻撃から半年が経過したことを受け、合意文書を生かした外交努力を模索すべきだと論じた社説。", url:"https://www.asahi.com/articles/DA3S16535603.html", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際", title:"イラン攻撃半年 覚書生かす外交を探れ", summary:"米国等によるイラン攻撃から半年が経過したことを受け、合意文書を生かした外交努力を模索すべきだと論じた社説。", url:"https://www.asahi.com/articles/DA3S16535603.html", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"熊本の被災者 一人一人に届く支援を", summary:"熊本地震の被災者一人一人に行き届く支援のあり方を論じた社説。", url:"https://www.asahi.com/articles/DA3S16535606.html", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"福祉・社説", title:"熊本の被災者 一人一人に届く支援を", summary:"熊本地震の被災者一人一人に行き届く支援のあり方を論じた社説。", url:"https://www.asahi.com/articles/DA3S16535606.html", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"政府のエネルギー戦略 危機克服の展望が見えぬ", summary:"政府が示すエネルギー戦略について、危機を克服する具体的な展望が見えないと指摘した社説。", url:"https://mainichi.jp/articles/20260829/ddm/005/070/115000c", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"政府のエネルギー戦略 危機克服の展望が見えぬ", summary:"政府が示すエネルギー戦略について、危機を克服する具体的な展望が見えないと指摘した社説。", url:"https://mainichi.jp/articles/20260829/ddm/005/070/115000c", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"首長のパワハラ 自治の病弊根絶が急務だ", summary:"自治体首長によるパワーハラスメント問題を受け、自治の病弊の根絶が急務だと論じた社説。", url:"https://mainichi.jp/articles/20260829/ddm/005/070/117000c", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"首長のパワハラ 自治の病弊根絶が急務だ", summary:"自治体首長によるパワーハラスメント問題を受け、自治の病弊の根絶が急務だと論じた社説。", url:"https://mainichi.jp/articles/20260829/ddm/005/070/117000c", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"米国は対イラン戦の袋小路を直視せよ", summary:"イラン攻撃から半年を経ても出口の見えない米国の対イラン戦略について、袋小路に陥っている現実を直視すべきだと論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK281XF0Y6A820C2000000/", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際", title:"米国は対イラン戦の袋小路を直視せよ", summary:"イラン攻撃から半年を経ても出口の見えない米国の対イラン戦略について、袋小路に陥っている現実を直視すべきだと論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK281XF0Y6A820C2000000/", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"ネパール洪水に温暖化の懸念", summary:"ネパールで発生した大規模な洪水・土石流をめぐり、気候変動による災害リスクの高まりへの懸念を論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK284MI0Y6A820C2000000/", date:"8/29"},
+        {category:"実技・専門系", tag:"科学技術・社説", title:"ネパール洪水に温暖化の懸念", summary:"ネパールで発生した大規模な洪水・土石流をめぐり、気候変動による災害リスクの高まりへの懸念を論じた社説。", url:"https://www.nikkei.com/article/DGXZQODK284MI0Y6A820C2000000/", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"産経新聞 社説", tag:"社説", title:"3党合流見送り 政策の議論が見当たらぬ", summary:"野党3党の合流見送りをめぐり、肝心の政策論議が見当たらないと批判した社説。", url:"https://www.sankei.com/article/20260829-XQWQU36QOJIIZJ4F7TQQH27Z7E/", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"3党合流見送り 政策の議論が見当たらぬ", summary:"野党3党の合流見送りをめぐり、肝心の政策論議が見当たらないと批判した社説。", url:"https://www.sankei.com/article/20260829-XQWQU36QOJIIZJ4F7TQQH27Z7E/", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"産経新聞 社説", tag:"社説", title:"熊本地震1カ月 被害検証し対策の共有を", summary:"熊本地震の発生から1カ月を迎え、被害の検証と得られた教訓の共有を求めた社説。", url:"https://www.sankei.com/article/20260829-2YBJNCCZKRKOXPUBGNLZXRVBXY/", date:"8/29"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"福祉・社説", title:"熊本地震1カ月 被害検証し対策の共有を", summary:"熊本地震の発生から1カ月を迎え、被害の検証と得られた教訓の共有を求めた社説。", url:"https://www.sankei.com/article/20260829-2YBJNCCZKRKOXPUBGNLZXRVBXY/", date:"8/29"},
+
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"福祉", title:"介護職員、2026年度に約25万人不足の推計 厚労省", summary:"厚生労働省の推計によると、2026年度の介護職員は約25万人不足する見通しで、2040年度には57万人規模に拡大するとされている。", url:"https://kaigonews.net/articles/kaigo-jinzai-busoku-2026-2040", date:"8月"}
       ]
     }
   ];
