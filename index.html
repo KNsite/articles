@@ -159,7 +159,9 @@
    ・最新のものを配列の先頭に置く(表示は先頭から最大3件)。
    ・古くなったら削除してOK(履歴として残す必要はない)。
    ===================================================================== */
-  const BREAKING = [];
+  const BREAKING = [
+    {category:"社会・ビジネス系", career_tag:"", tag:"速報", breaking:true, posted:"2026-08-30", title:"福井県に大雨特別警報 福井市・大野市・勝山市の3市が対象", summary:"前線と湿った空気の影響で予想を上回る大雨となり、気象庁が30日午前4時30分に最高レベルの特別警報を発表。浸水や川の氾濫による重大な災害がすでに発生している可能性が極めて高いとして、命を守る行動が呼びかけられている。", url:"https://news.web.nhk/newsweb/na/nd-20260830de47200", date:"8/30"}
+  ];
 
 /* =====================================================================
    記事データ(ここを毎朝更新する) — 週ごとのアーカイブ構造
@@ -506,7 +508,57 @@
         {category:"社会・ビジネス系", career_tag:"福祉", tag:"社会・生活", title:"トイレ数に指針 「女性だけ混雑」解消へ", summary:"公共施設の女性用トイレの混雑解消に向け、便器数に関する新たな指針の必要性を論じた社説。", url:"https://www.chunichi.co.jp/article/1303492", date:"8/29"},
 
         {category:"社説", editorial:true, source:"中日新聞 社説", tag:"社説", title:"最高時速30キロに 生活道路は「人が優先」", summary:"住宅街などの生活道路の最高速度を時速30キロに引き下げる動きをめぐり、「人優先」の道路づくりの重要性を論じた社説。", url:"https://www.chunichi.co.jp/article/1303491", date:"8/29"},
-        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"最高時速30キロに 生活道路は「人が優先」", summary:"住宅街などの生活道路の最高速度を時速30キロに引き下げる動きをめぐり、「人優先」の道路づくりの重要性を論じた社説。", url:"https://www.chunichi.co.jp/article/1303491", date:"8/29"}
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"最高時速30キロに 生活道路は「人が優先」", summary:"住宅街などの生活道路の最高速度を時速30キロに引き下げる動きをめぐり、「人優先」の道路づくりの重要性を論じた社説。", url:"https://www.chunichi.co.jp/article/1303491", date:"8/29"},
+
+        {category:"社会・ビジネス系", tag:"社会・天気", title:"福井県に大雨特別警報 福井市・大野市・勝山市の3市が対象", summary:"前線と湿った空気の影響で予想を上回る大雨となり、気象庁が30日午前4時30分に最高レベルの特別警報を発表。浸水や川の氾濫による重大な災害がすでに発生している可能性が極めて高いとして、命を守る行動が呼びかけられている。", url:"https://news.web.nhk/newsweb/na/nd-20260830de47200", date:"8/30"},
+
+        {category:"実技・専門系", tag:"高校野球", title:"高校野球秋季大会、岩手・山形・宮城・福島・栃木・千葉・長野・静岡・岐阜・三重・京都・奈良・和歌山・大阪・兵庫・岡山・広島・福岡で開催", summary:"来春のセンバツ甲子園につながる秋季大会が各地で続いており、この日は18都府県で試合や組み合わせ抽選会が行われた。", url:"https://www.xn--8wv97xz6xo7h.online/report-2026-0829/", date:"8/29"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"次期戦闘機 参加国拡大で開発を加速せよ", summary:"日英伊が共同開発する次期戦闘機をめぐり、参加国を広げて開発を加速させる必要性を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260829-GYT1T00285/", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際関係", title:"次期戦闘機 参加国拡大で開発を加速せよ", summary:"日英伊が共同開発する次期戦闘機をめぐり、参加国を広げて開発を加速させる必要性を論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20260829-GYT1T00285/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"ウナギ完全養殖 半世紀にわたる夢が食卓に", summary:"稚魚から成魚までを人工的に育てるウナギの完全養殖が実用段階に近づいていることを歓迎する社説。", url:"https://www.yomiuri.co.jp/editorial/20260829-GYT1T00284/", date:"8/30"},
+        {category:"実技・専門系", career_tag:"調理", tag:"調理・社説", title:"ウナギ完全養殖 半世紀にわたる夢が食卓に", summary:"稚魚から成魚までを人工的に育てるウナギの完全養殖が実用段階に近づいていることを歓迎する社説。", url:"https://www.yomiuri.co.jp/editorial/20260829-GYT1T00284/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"企業指針の改訂 株主偏重ただす契機に", summary:"企業統治指針の改訂をめぐり、行き過ぎた株主偏重の経営を見直す契機にすべきだと論じた社説。", url:"https://www.asahi.com/articles/DA3S16536311.html", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"企業指針の改訂 株主偏重ただす契機に", summary:"企業統治指針の改訂をめぐり、行き過ぎた株主偏重の経営を見直す契機にすべきだと論じた社説。", url:"https://www.asahi.com/articles/DA3S16536311.html", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"朝日新聞 社説", tag:"社説", title:"外国人の永住 望みを砕く変更は悪手", summary:"永住許可の要件厳格化について、外国人材の希望を砕くような変更は悪手だと論じた社説。", url:"https://www.asahi.com/articles/DA3S16536310.html", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"外国人の永住 望みを砕く変更は悪手", summary:"永住許可の要件厳格化について、外国人材の希望を砕くような変更は悪手だと論じた社説。", url:"https://www.asahi.com/articles/DA3S16536310.html", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"昨年に続く死刑執行 停止し存廃議論深めねば", summary:"死刑執行が2年連続で行われたことを受け、執行を停止し制度の存廃議論を深めるべきだと論じた社説。", url:"https://mainichi.jp/articles/20260830/ddm/005/070/117000c", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"法学", tag:"法学", title:"昨年に続く死刑執行 停止し存廃議論深めねば", summary:"死刑執行が2年連続で行われたことを受け、執行を停止し制度の存廃議論を深めるべきだと論じた社説。", url:"https://mainichi.jp/articles/20260830/ddm/005/070/117000c", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"毎日新聞 社説", tag:"社説", title:"整備新幹線の費用負担 建設ありき理解得られぬ", summary:"整備新幹線の費用負担をめぐり、建設ありきの姿勢では住民の理解は得られないと論じた社説。", url:"https://mainichi.jp/articles/20260830/ddm/005/070/116000c", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"整備新幹線の費用負担 建設ありき理解得られぬ", summary:"整備新幹線の費用負担をめぐり、建設ありきの姿勢では住民の理解は得られないと論じた社説。", url:"https://mainichi.jp/articles/20260830/ddm/005/070/116000c", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"FRBは市場安定へさらなる対話重視を", summary:"米連邦準備制度理事会(FRB)に対し、市場の安定に向けて市場との対話を重視するよう求めた社説。", url:"https://www.nikkei.com/article/DGXZQODK2916X0Z20C26A8000000/", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"FRBは市場安定へさらなる対話重視を", summary:"米連邦準備制度理事会(FRB)に対し、市場の安定に向けて市場との対話を重視するよう求めた社説。", url:"https://www.nikkei.com/article/DGXZQODK2916X0Z20C26A8000000/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"日本経済新聞 社説", tag:"社説", title:"職場改革で男性の育児を促せ", summary:"男性の育児参加を広げるため、長時間労働の是正など職場改革を進める必要性を論じた社説。", url:"https://www.nikkei.com/article/DGXZQOCD2068W0Q6A820C2000000/", date:"8/30"},
+        {category:"教育・保育系", career_tag:"保育", tag:"保育", title:"職場改革で男性の育児を促せ", summary:"男性の育児参加を広げるため、長時間労働の是正など職場改革を進める必要性を論じた社説。", url:"https://www.nikkei.com/article/DGXZQOCD2068W0Q6A820C2000000/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"産経新聞 社説", tag:"社説", title:"男性育休5割超え 一層の促進と中身充実を", summary:"男性の育休取得率が初めて5割を超えたことを受け、さらなる促進と取得内容の充実を求めた社説。", url:"https://www.sankei.com/article/20260830-UBHH4FWLLNLMRJTN7FHUAG4SMY/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"産経新聞 社説", tag:"社説", title:"北方領土 露の不法占拠を非難する", summary:"北方領土をめぐり、ロシアによる不法占拠を改めて非難した社説。", url:"https://www.sankei.com/article/20260830-67EFJPB5KZNORHR3YFXSD5VWMM/", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際関係", title:"北方領土 露の不法占拠を非難する", summary:"北方領土をめぐり、ロシアによる不法占拠を改めて非難した社説。", url:"https://www.sankei.com/article/20260830-67EFJPB5KZNORHR3YFXSD5VWMM/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"中日新聞 社説", tag:"社説", title:"週のはじめに考える 切れる知能 キレる恐怖", summary:"中日新聞の日曜コラム社説。", url:"https://www.chunichi.co.jp/article/1303974", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"西日本新聞 社説", tag:"社説", title:"残業指導見直し 長時間労働の懸念拭えぬ", summary:"残業時間の上限規制に関する指導基準の見直しをめぐり、長時間労働につながりかねないとの懸念を論じた社説。", url:"https://www.nishinippon.co.jp/item/1532302/", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"残業指導見直し 長時間労働の懸念拭えぬ", summary:"残業時間の上限規制に関する指導基準の見直しをめぐり、長時間労働につながりかねないとの懸念を論じた社説。", url:"https://www.nishinippon.co.jp/item/1532302/", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"新潟日報 社説", tag:"社説", title:"ネパール土石流 国際社会の救援が不可欠", summary:"ネパールで発生した大規模な土石流をめぐり、国際社会による救援の不可欠さを論じた社説。", url:"https://www.niigata-nippo.co.jp/articles/-/897228", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際", title:"ネパール土石流 国際社会の救援が不可欠", summary:"ネパールで発生した大規模な土石流をめぐり、国際社会による救援の不可欠さを論じた社説。", url:"https://www.niigata-nippo.co.jp/articles/-/897228", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"神戸新聞 社説", tag:"社説", title:"食料自給率37％／輸入頼みのリスク直視を", summary:"日本の食料自給率が37%にとどまることを受け、輸入依存のリスクを直視すべきだと論じた社説。", url:"https://www.kobe-np.co.jp/opinion/202608/0020761629.shtml", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済", title:"食料自給率37％／輸入頼みのリスク直視を", summary:"日本の食料自給率が37%にとどまることを受け、輸入依存のリスクを直視すべきだと論じた社説。", url:"https://www.kobe-np.co.jp/opinion/202608/0020761629.shtml", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"高知新聞 社説", tag:"社説", title:"【ナシ農家の挑戦】新形態で農業を次代へ", summary:"梨農家の新たな経営形態への挑戦を紹介し、農業を次の世代へつなぐ取り組みを論じた社説。", url:"https://www.kochinews.co.jp/article/detail/1039235", date:"8/30"},
+        {category:"実技・専門系", career_tag:"調理", tag:"調理・社説", title:"【ナシ農家の挑戦】新形態で農業を次代へ", summary:"梨農家の新たな経営形態への挑戦を紹介し、農業を次の世代へつなぐ取り組みを論じた社説。", url:"https://www.kochinews.co.jp/article/detail/1039235", date:"8/30"},
+
+        {category:"社説", editorial:true, source:"琉球新報 社説", tag:"社説", title:"横浜市長パワハラ辞任へ 首長の人権意識問われる", summary:"横浜市長がパワーハラスメント問題で辞任する事態を受け、首長の人権意識が問われると論じた社説。", url:"https://ryukyushimpo.jp/editorial/entry-5489667.html", date:"8/30"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"経営", title:"横浜市長パワハラ辞任へ 首長の人権意識問われる", summary:"横浜市長がパワーハラスメント問題で辞任する事態を受け、首長の人権意識が問われると論じた社説。", url:"https://ryukyushimpo.jp/editorial/entry-5489667.html", date:"8/30"}
       ]
     }
   ];
