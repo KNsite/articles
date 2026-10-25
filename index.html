@@ -160,7 +160,7 @@
    ・古くなったら削除してOK(履歴として残す必要はない)。
    ===================================================================== */
   const BREAKING = [
-    {category:"社会・ビジネス系", career_tag:"", tag:"速報", breaking:true, posted:"2026-10-22", title:"台風30号、沖縄の南に到達 先島諸島は23日午後〜24日未明に最接近、暴風・高波に厳重警戒", summary:"大型で猛烈な勢力の台風30号(チャンパー)が沖縄の南に達し、先島諸島は全域が強風域に入った。23日午後から24日未明にかけて最も接近し、最大瞬間風速40〜50m/sの暴風や10m前後の猛烈なしけが予想されるため厳重な警戒が必要。その後は東シナ海を北上して勢力を弱めつつ、26日ごろ西日本に近づくおそれもあるが、進路の転向時期には不確実性が残る。", url:"https://weathernews.jp/news/202610/220111/", date:"10/22"}
+    {category:"社会・ビジネス系", career_tag:"", tag:"速報", breaking:true, posted:"2026-10-24", title:"台風30号、26日に九州接近・上陸のおそれ 前線の影響で西日本・東日本も大雨警戒", summary:"大型で強い台風30号(チャンパー)は東シナ海を北上し、25日午後には進路を東寄りに変えて西日本へ接近する見込み。26日には九州に接近・上陸するおそれがあり、暴風や高波・高潮に警戒が必要。前線の影響も重なり、近畿・東海・関東甲信など広範囲で26〜27日にかけて警報級の大雨となる可能性がある。", url:"https://tenki.jp/forecaster/domoto_yukiyo/2026/10/24/41074.html", date:"10/24"}
   ];
 
 /* =====================================================================
@@ -1800,6 +1800,65 @@
 
         {category:"実技・専門系", career_tag:"スポーツ科学", tag:"プロ野球・ドラフト", title:"ドラフト会議2026指名選手リアルタイム速報!12球団の全指名結果", summary:"10月22日に開催される2026年プロ野球ドラフト会議の模様を伝える速報記事。高校生127人と大学生149人がプロ志望届を提出しており、海外の大学に通う日本人選手も対象となっている。", url:"https://www.hb-nippon.com/articles/18481", date:"10/22"},
         {category:"実技・専門系", tag:"科学技術", title:"火星衛星フォボスの試料回収へ旅立ち MMX打ち上げ成功 種子島", summary:"火星の衛星フォボスの試料を地球に持ち帰る探査機MMXを載せたH3ロケットが種子島宇宙センターから打ち上げられ、火星へ向かう軌道への投入に成功した。来年夏ごろに火星付近へ到着し、2031年度の地球帰還を目指す。", url:"https://scienceportal.jst.go.jp/newsflash/20261021_n01/", date:"10/21"}
+      ]
+    },
+    {
+      label: "10/24〜10/30",
+      articles: [
+        {category:"医療・健康系", career_tag:"", tag:"医療・福祉機器", title:"メガネ型XRグラスで意思表示、患者が自発的に活用 嶺井第一病院", summary:"嶺井第一病院で、体を動かすことが難しい患者がメガネ型のXR(拡張現実)グラスを使い、視線の動きなどで自発的に意思表示をする取り組みが行われている。", url:"https://ryukyushimpo.jp/economics/entry-5575118.html", date:"10/25"},
+
+        {category:"教育・保育系", career_tag:"教育", tag:"進路・進学", title:"難関10国立大現役進学者数、栃木県の最多「宇都宮」67人", summary:"大学通信の調査で、栃木県の高校から難関10国立大への現役進学者数が最も多かったのは宇都宮高校の67人だった。", url:"https://resemom.jp/article/2026/10/23/88008.html", date:"10/23"},
+        {category:"教育・保育系", career_tag:"教育", tag:"高校入試", title:"【高校受験2027】山形県公立高入試、学力検査は3月7日", summary:"山形県教育委員会は2027年度の公立高校入試について、学力検査を3月7日に実施すると発表した。", url:"https://resemom.jp/article/2026/10/23/88027.html", date:"10/23"},
+        {category:"教育・保育系", career_tag:"教育", tag:"読書", title:"小中学生の約7割が読書好き、一方で「週1時間未満」も7割超", summary:"調査によると、小中学生の約7割が読書を好きと答えた一方、読書に充てる時間が週1時間未満という回答も7割を超えた。", url:"https://resemom.jp/article/2026/10/23/88017.html", date:"10/23"},
+        {category:"教育・保育系", career_tag:"教育", tag:"英語検定", title:"英検2次直前の面接対策、無料セミナーを10/30開催 1次合否閲覧は10/26から", summary:"英検の2次試験に向けた面接対策の無料セミナーが10月30日に開かれる。1次試験の合否閲覧は10月26日から始まる。", url:"https://resemom.jp/article/2026/10/23/88018.html", date:"10/23"},
+        {category:"教育・保育系", career_tag:"教育", tag:"大学新設", title:"高志大など5大学が2028年新設申請、認可は7月末に前倒しへ", summary:"2028年の大学新設に向け高志大などが申請を行い、文部科学省の認可時期が例年より早い7月末に前倒しされる見通しとなった。", url:"https://resemom.jp/article/2026/10/23/88022.html", date:"10/23"},
+
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"経済・物価", title:"9月の物価上昇率、9カ月ぶりに2%台 食料や水道代が上昇", summary:"9月の全国の消費者物価指数は、食料品や水道代の上昇を背景に9カ月ぶりに2%台の上昇率となった。", url:"https://ryukyushimpo.jp/economics/entry-5574017.html", date:"10/24"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"セキュリティ", title:"佐川急便、最大5323万件の情報漏えいの可能性 不正アクセス", summary:"佐川急便はシステムへの不正アクセスを受け、最大約5323万件の顧客情報が流出した可能性があると発表した。", url:"https://ryukyushimpo.jp/economics/entry-5574013.html", date:"10/24"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"セキュリティ", title:"タイムズ、顧客に3000円を補償 運転免許証の画像など146万件流出", summary:"カーシェアサービスのタイムズは、不正アクセスにより運転免許証の画像など顧客情報約146万件が流出したとして、対象の顧客に3000円を補償すると発表した。", url:"https://ryukyushimpo.jp/economics/entry-5574020.html", date:"10/24"},
+        {category:"社会・ビジネス系", career_tag:"国際関係", tag:"国際・通商", title:"米、対カナダ関税を一部除外 中間選挙にらみ反発回避", summary:"米国は対カナダ関税について一部品目を除外する方針を示した。中間選挙を控え、国内産業からの反発回避を図ったとみられる。", url:"https://ryukyushimpo.jp/economics/entry-5575145.html", date:"10/25"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"企業・雇用", title:"アメリカン・エキスプレス、世界で従業員5%を削減", summary:"米大手カード会社アメリカン・エキスプレスは、業務効率化を進めるため世界の従業員の5%を削減すると発表した。", url:"https://ryukyushimpo.jp/economics/entry-5575124.html", date:"10/25"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"AI・セキュリティ", title:"AIによる欠陥発見が8.5万件に 前年同期の2倍、対策強化が急務", summary:"ソフトウエアの欠陥をAIが発見した件数が前年同期の2倍となる8.5万件に達し、企業に対策強化が求められている。", url:"https://ryukyushimpo.jp/economics/entry-5575129.html", date:"10/25"},
+        {category:"社会・ビジネス系", career_tag:"経済", tag:"物価", title:"カボチャや衣装も値上げ ハロウィーン商戦にも物価高の影響", summary:"ハロウィーン関連商品でもカボチャや衣装などの値上げが相次ぎ、物価高の影響が行事需要にも及んでいる。", url:"https://ryukyushimpo.jp/economics/entry-5575141.html", date:"10/25"},
+        {category:"社会・ビジネス系", career_tag:"経営", tag:"セキュリティ", title:"官民挙げた「守り」なるか サイバー対策、個別企業への適用に課題", summary:"相次ぐサイバー攻撃を受け、官民が連携した防御体制の構築が進められているが、個別企業への実際の適用には課題が残る。", url:"https://ryukyushimpo.jp/economics/entry-5575133.html", date:"10/25"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"介護・福祉", title:"特養の55.8%が赤字 全国老施協「介護崩壊と言うべき危険水域」", summary:"全国老人福祉施設協議会の調査で、特別養護老人ホームの55.8%が前年度決算で赤字だったことが判明し、「介護崩壊と言うべき危険水域」だと指摘した。", url:"https://www.joint-kaigo.com/articles/49791/", date:"10/23"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"介護・福祉", title:"介護現場の事故報告、様式の見直し案を公表 厚労省", summary:"厚生労働省は介護現場での事故報告について、様式を見直す案を公表した。来年4月頃から新システムの稼働を目指す。", url:"https://www.joint-kaigo.com/articles/49779/", date:"10/23"},
+
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"高校野球", title:"コザ、きょう初戦 秋季九州高校野球", summary:"秋季九州地区高校野球大会で、沖縄県代表のコザ高校が初戦を迎える。", url:"https://ryukyushimpo.jp/sports/entry-5574528.html", date:"10/24"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"パラスポーツ", title:"ゴールボール安室組、銀メダル 堅守の中国にあと一歩 愛知・名古屋アジアパラ大会", summary:"愛知・名古屋アジアパラ競技大会のゴールボールで、安室選手らが銀メダルを獲得した。堅守の中国相手に惜しくも及ばなかった。", url:"https://ryukyushimpo.jp/sports/entry-5574547.html", date:"10/24"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"パラスポーツ", title:"井手が沖縄県勢第1号の金メダル フライングディスク座位女子 全国障害者スポーツ大会", summary:"全国障害者スポーツ大会のフライングディスク座位女子2部で、井手選手が沖縄県勢として大会第1号となる金メダルを獲得した。", url:"https://ryukyushimpo.jp/sports/entry-5574541.html", date:"10/24"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"プロ野球・ドラフト", title:"末吉「勝てる投手に」 日本ハム3位指名に安堵 プロ野球ドラフト会議", summary:"プロ野球ドラフト会議で日本ハムから3位指名を受けた末吉投手が、勝てる投手になりたいと意気込みを語った。", url:"https://ryukyushimpo.jp/sports/entry-5573190.html", date:"10/23"},
+        {category:"実技・専門系", career_tag:"スポーツ科学", tag:"プロ野球・ドラフト", title:"神里、DeNA6位指名 兄・和毅と同球団で「勝利に貢献したい」 プロ野球ドラフト会議", summary:"プロ野球ドラフト会議でDeNAから6位指名を受けた神里選手が、同球団に所属する兄・和毅選手とともにチームの勝利に貢献したいと話した。", url:"https://ryukyushimpo.jp/sports/entry-5573293.html", date:"10/23"},
+
+        {category:"社説", editorial:true, source:"読売新聞 社説", tag:"社説", title:"秋の読書月間 ゆっくり本と向き合う時間に", summary:"秋の読書月間にあたり、日々の忙しさの中でも本とゆっくり向き合う時間を持つ大切さを論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20261024-GYT1T00323/", date:"10/25"},
+        {category:"教育・保育系", career_tag:"教育", tag:"読書・社説", title:"秋の読書月間 ゆっくり本と向き合う時間に", summary:"秋の読書月間にあたり、日々の忙しさの中でも本とゆっくり向き合う時間を持つ大切さを論じた社説。", url:"https://www.yomiuri.co.jp/editorial/20261024-GYT1T00323/", date:"10/25"},
+
+        {category:"社説", editorial:true, source:"西日本新聞 社説", tag:"社説", title:"AI・情報教育 自ら考える力を育みたい", summary:"生成AIの普及が進む中、情報教育を通じて自ら考える力を育む重要性を論じた社説。", url:"https://www.nishinippon.co.jp/item/1552683/", date:"10/24"},
+        {category:"教育・保育系", career_tag:"教育", tag:"教育・社説", title:"AI・情報教育 自ら考える力を育みたい", summary:"生成AIの普及が進む中、情報教育を通じて自ら考える力を育む重要性を論じた社説。", url:"https://www.nishinippon.co.jp/item/1552683/", date:"10/24"},
+
+        {category:"社説", editorial:true, source:"愛媛新聞 社説", tag:"社説", title:"進学費用 将来の選択肢を狭めぬ支援こそ", summary:"進学にかかる費用の重さが子どもの将来の選択肢を狭めないよう、支援拡充の必要性を論じた社説。", url:"https://www.ehime-np.co.jp/article/news202610240006", date:"10/24"},
+        {category:"教育・保育系", career_tag:"教育", tag:"進学費用・社説", title:"進学費用 将来の選択肢を狭めぬ支援こそ", summary:"進学にかかる費用の重さが子どもの将来の選択肢を狭めないよう、支援拡充の必要性を論じた社説。", url:"https://www.ehime-np.co.jp/article/news202610240006", date:"10/24"},
+
+        {category:"社説", editorial:true, source:"西日本新聞 社説", tag:"社説", title:"小児がん病院 集約と患者支援の両立を", summary:"小児がん医療の集約化が進む中、患者や家族への支援を両立させていく必要性を論じた社説。", url:"https://www.nishinippon.co.jp/item/1552907/", date:"10/25"},
+        {category:"医療・健康系", career_tag:"看護", tag:"小児医療・社説", title:"小児がん病院 集約と患者支援の両立を", summary:"小児がん医療の集約化が進む中、患者や家族への支援を両立させていく必要性を論じた社説。", url:"https://www.nishinippon.co.jp/item/1552907/", date:"10/25"},
+
+        {category:"社説", editorial:true, source:"神戸新聞 社説", tag:"社説", title:"持続可能な介護 先端技術の導入に支援を", summary:"介護の持続可能性を高めるため、介護ロボットなど先端技術の導入を後押しする支援の必要性を論じた社説。", url:"https://www.kobe-np.co.jp/opinion/202610/0020964473.shtml", date:"10/25"},
+        {category:"社会・ビジネス系", career_tag:"福祉", tag:"介護・社説", title:"持続可能な介護 先端技術の導入に支援を", summary:"介護の持続可能性を高めるため、介護ロボットなど先端技術の導入を後押しする支援の必要性を論じた社説。", url:"https://www.kobe-np.co.jp/opinion/202610/0020964473.shtml", date:"10/25"},
+
+        {category:"社説", editorial:true, source:"下野新聞 社説", tag:"社説", title:"女性初の棋士資格 後進の裾野拡大を期待", summary:"女性として初めて棋士資格を得たことを受け、将棋界で後進の裾野が広がることへの期待を論じた社説。", url:"https://www.shimotsuke.co.jp/articles/-/1446543", date:"10/24"},
+        {category:"実技・専門系", tag:"将棋・社説", title:"女性初の棋士資格 後進の裾野拡大を期待", summary:"女性として初めて棋士資格を得たことを受け、将棋界で後進の裾野が広がることへの期待を論じた社説。", url:"https://www.shimotsuke.co.jp/articles/-/1446543", date:"10/24"},
+
+        {category:"社説", editorial:true, source:"愛媛新聞 社説", tag:"社説", title:"社会人向け新教免課程 人数確保策に偏らない仕組みに", summary:"教員不足対策として設けられる社会人向けの新たな教員免許課程について、人数確保策に偏らない仕組みづくりを求めた社説。", url:"https://www.ehime-np.co.jp/article/news202610250011", date:"10/25"},
+        {category:"教育・保育系", career_tag:"教育", tag:"教員・社説", title:"社会人向け新教免課程 人数確保策に偏らない仕組みに", summary:"教員不足対策として設けられる社会人向けの新たな教員免許課程について、人数確保策に偏らない仕組みづくりを求めた社説。", url:"https://www.ehime-np.co.jp/article/news202610250011", date:"10/25"},
+
+        {category:"社説", editorial:true, source:"琉球新報 社説", tag:"社説", title:"軍事研究に応募急増 「軍学分離」に立ち返れ", summary:"防衛装備庁の制度に応募する大学が急増している実態を踏まえ、学問の自由を守る「軍学分離」の原則に立ち返るべきだと論じた社説。", url:"https://ryukyushimpo.jp/editorial/entry-5573855.html", date:"10/24"},
+        {category:"教育・保育系", career_tag:"教育", tag:"大学・社説", title:"軍事研究に応募急増 「軍学分離」に立ち返れ", summary:"防衛装備庁の制度に応募する大学が急増している実態を踏まえ、学問の自由を守る「軍学分離」の原則に立ち返るべきだと論じた社説。", url:"https://ryukyushimpo.jp/editorial/entry-5573855.html", date:"10/24"},
+
+        {category:"社説", editorial:true, source:"琉球新報 社説", tag:"社説", title:"プログラム言語欠陥 AI悪用防止、知恵絞れ", summary:"広く使われるプログラム言語に重大な欠陥が見つかったことを受け、AIによる悪用防止に向けた知恵を絞るべきだと論じた社説。", url:"https://ryukyushimpo.jp/editorial/entry-5575260.html", date:"10/25"},
+        {category:"実技・専門系", tag:"科学技術・社説", title:"プログラム言語欠陥 AI悪用防止、知恵絞れ", summary:"広く使われるプログラム言語に重大な欠陥が見つかったことを受け、AIによる悪用防止に向けた知恵を絞るべきだと論じた社説。", url:"https://ryukyushimpo.jp/editorial/entry-5575260.html", date:"10/25"},
+
+        {category:"社説", editorial:true, source:"徳島新聞 社説", tag:"社説", title:"インフル流行 日頃の対策を徹底したい", summary:"季節外れの早さでインフルエンザが流行している状況を踏まえ、手洗いや換気など日頃からの対策を徹底する大切さを論じた社説。", url:"https://www.topics.or.jp/articles/-/1514547", date:"10/24"},
+        {category:"医療・健康系", career_tag:"看護", tag:"健康・社説", title:"インフル流行 日頃の対策を徹底したい", summary:"季節外れの早さでインフルエンザが流行している状況を踏まえ、手洗いや換気など日頃からの対策を徹底する大切さを論じた社説。", url:"https://www.topics.or.jp/articles/-/1514547", date:"10/24"}
       ]
     }
   ];
